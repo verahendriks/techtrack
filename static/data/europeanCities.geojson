@@ -1,0 +1,401 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -2.459, 36.8383 ]
+      },
+      "properties": {
+        "city": "Almería",
+        "country": "Spanje",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -4.4203, 36.7213 ]
+      },
+      "properties": {
+        "city": "Málaga",
+        "country": "Spanje",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 0.4800, 38.3459 ]
+      },
+      "properties": {
+        "city": "Alicante",
+        "country": "Spanje",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 1.2500, 41.1167 ]
+      },
+      "properties": {
+        "city": "Tarragona",
+        "country": "Spanje",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 2.9400, 39.5716 ]
+      },
+      "properties": {
+        "city": "Palma de Mallorca",
+        "country": "Spanje (Balearen)",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 1.4740, 38.9088 ]
+      },
+      "properties": {
+        "city": "Ibiza Stad",
+        "country": "Spanje (Balearen)",
+        "timezone": "Europe/Madrid"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -15.4363, 28.1185 ]
+      },
+      "properties": {
+        "city": "Las Palmas",
+        "country": "Spanje (Canarische Eilanden)",
+        "timezone": "Atlantic/Canary"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 28.2176, 36.4348 ]
+      },
+      "properties": {
+        "city": "Rhodos",
+        "country": "Griekenland (Rhodos)",
+        "timezone": "Europe/Athens"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 25.1432, 35.3387 ]
+      },
+      "properties": {
+        "city": "Heraklion",
+        "country": "Griekenland (Kreta)",
+        "timezone": "Europe/Athens"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 22.1469, 37.0378 ]
+      },
+      "properties": {
+        "city": "Kalamáta",
+        "country": "Griekenland",
+        "timezone": "Europe/Athens"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 20.8997, 39.6277 ]
+      },
+      "properties": {
+        "city": "Corfu Stad",
+        "country": "Griekenland (Corfu)",
+        "timezone": "Europe/Athens"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 13.3615, 38.1157 ]
+      },
+      "properties": {
+        "city": "Palermo",
+        "country": "Italië (Sicilië)",
+        "timezone": "Europe/Rome"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 12.0305, 44.0682 ]
+      },
+      "properties": {
+        "city": "Rimini",
+        "country": "Italië",
+        "timezone": "Europe/Rome"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 9.5312, 39.2132 ]
+      },
+      "properties": {
+        "city": "Cagliari",
+        "country": "Italië (Sardinië)",
+        "timezone": "Europe/Rome"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 14.2681, 40.8518 ]
+      },
+      "properties": {
+        "city": "Napels",
+        "country": "Italië",
+        "timezone": "Europe/Rome"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -7.9304, 37.0194 ]
+      },
+      "properties": {
+        "city": "Faro",
+        "country": "Portugal",
+        "timezone": "Europe/Lisbon"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -17.0305, 32.6508 ]
+      },
+      "properties": {
+        "city": "Funchal",
+        "country": "Portugal (Madeira)",
+        "timezone": "Atlantic/Madeira"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -25.6667, 37.7412 ]
+      },
+      "properties": {
+        "city": "Ponta Delgada",
+        "country": "Portugal (Azoren)",
+        "timezone": "Atlantic/Azores"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 7.2620, 43.7102 ]
+      },
+      "properties": {
+        "city": "Nice",
+        "country": "Frankrijk",
+        "timezone": "Europe/Paris"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 5.3698, 43.2965 ]
+      },
+      "properties": {
+        "city": "Marseille",
+        "country": "Frankrijk",
+        "timezone": "Europe/Paris"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 39.7188, 43.5855 ]
+      },
+      "properties": {
+        "city": "Sotsji",
+        "country": "Rusland",
+        "timezone": "Europe/Moscow"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 16.4402, 43.5081 ]
+      },
+      "properties": {
+        "city": "Split",
+        "country": "Kroatië",
+        "timezone": "Europe/Zagreb"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 18.0944, 42.6507 ]
+      },
+      "properties": {
+        "city": "Dubrovnik",
+        "country": "Kroatië",
+        "timezone": "Europe/Zagreb"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 28.6577, 44.1793 ]
+      },
+      "properties": {
+        "city": "Constanța",
+        "country": "Roemenië",
+        "timezone": "Europe/Bucharest"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 14.5186, 35.9042 ]
+      },
+      "properties": {
+        "city": "Valletta",
+        "country": "Malta (Malta)",
+        "timezone": "Europe/Malta"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 34.7663, 33.0487 ]
+      },
+      "properties": {
+        "city": "Limassol",
+        "country": "Cyprus (Cyprus)",
+        "timezone": "Asia/Nicosia"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 28.9784, 41.0082 ]
+      },
+      "properties": {
+        "city": "Istanboel",
+        "country": "Turkije",
+        "timezone": "Europe/Istanbul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 30.7135, 36.8848 ]
+      },
+      "properties": {
+        "city": "Antalya",
+        "country": "Turkije",
+        "timezone": "Europe/Istanbul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 27.1428, 38.4237 ]
+      },
+      "properties": {
+        "city": "Izmir",
+        "country": "Turkije",
+        "timezone": "Europe/Istanbul"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 27.4725, 42.5048 ]
+      },
+      "properties": {
+        "city": "Burgas",
+        "country": "Bulgarije",
+        "timezone": "Europe/Sofia"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 27.9105, 43.2047 ]
+      },
+      "properties": {
+        "city": "Varna",
+        "country": "Bulgarije",
+        "timezone": "Europe/Sofia"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 19.8821, 41.3853 ]
+      },
+      "properties": {
+        "city": "Durrës",
+        "country": "Albanië",
+        "timezone": "Europe/Tirane"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 18.8475, 42.2858 ]
+      },
+      "properties": {
+        "city": "Budva",
+        "country": "Montenegro",
+        "timezone": "Europe/Podgorica"
+      }
+    }
+  ]
+}
