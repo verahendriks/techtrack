@@ -42,23 +42,3 @@
     <p>Geen data beschikbaar om te tonen.</p>
   {/if}
 </main>
-
-<style>
-  :global(body) {
-    background-color: #ffe6cf;
-  }
-
-  main {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 0 20px;
-  }
-
-  h1 {
-    font-size: 25px;
-  }
-
-  .chart-container {
-    margin-top: 30px;
-  }
-</style>
