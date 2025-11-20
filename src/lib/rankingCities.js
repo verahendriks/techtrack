@@ -26,14 +26,17 @@ async function prepareCities() {
 // Haalt weerdata op en creëert de Top 10 ranking
 export async function getSunshineRanking() {
   const now = Date.now();
+  let expiredData = null;
 
   // 1. Controleer cache
   try {
     const cachedItem = localStorage.getItem(CACHE_KEY);
     if (cachedItem) {
       const { timestamp, data } = JSON.parse(cachedItem);
+      
       if (now - timestamp < CACHE_EXPIRY_MS) return data;
-      localStorage.removeItem(CACHE_KEY);
+
+      expiredData = data;
     }
   } catch (e) {
     console.error("Fout bij lezen/parsen van cache:", e);
@@ -42,7 +45,15 @@ export async function getSunshineRanking() {
   // 2. Haal nieuwe data op
   try {
     const cities = await prepareCities();
-    if (cities.length === 0) return [];
+    
+    // Als steden laden mislukt, toon oude cache indien beschikbaar
+    if (cities.length === 0) {
+        if (expiredData) {
+            console.log("Kon steden niet laden, toon oude cache.");
+            return expiredData;
+        }
+        return [];
+    }
 
     const fetchCityData = async (city, index) => {
       await delay(index * API_CALL_DELAY_MS); // Rate limiting
@@ -60,7 +71,7 @@ export async function getSunshineRanking() {
             name,
             averageHours,
             maxUV,
-            rawData: data // volledige API response toevoegen
+            rawData: data 
           };        
         }
       } catch (error) {
@@ -78,14 +89,27 @@ export async function getSunshineRanking() {
       .sort((a, b) => b.averageHours - a.averageHours)
       .slice(0, 10);
 
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify({ timestamp: now, data: top10 })
-    );
+    // Alleen opslaan als we daadwerkelijk data hebben
+    if (top10.length > 0) {
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({ timestamp: now, data: top10 })
+      );
+      return top10;
+    } else {
+       throw new Error("Geen resultaten uit API gekomen");
+    }
 
-    return top10;
   } catch (e) {
-    console.error("Fout in getSunshineRanking:", e);
-    return [];
+    console.log("Fout in getSunshineRanking:", e);
+    
+    // Fallback: toon verlopen cache als API faalt
+    if (expiredData) {
+        console.log("API faalde, maar we tonen verlopen cache data.");
+        return expiredData;
+    }
+    
+    // Als er echt geen data is
+    return []; 
   }
 }
