@@ -7,16 +7,17 @@ export const featureToCity = ({ properties, geometry }) => {
 
   return {
     name: `${properties.city}, ${properties.country}`,
+    shortName: properties.city,
     lat,
     lon,
-    timezone: properties.timezone,
+    timezone: properties.timezone
   };
 };
 
 // Bouwt de volledige API URL voor een stad
 export const buildApiUrl = ({ lat, lon, timezone }, API_BASE_URL) =>
   `${API_BASE_URL}?latitude=${lat}&longitude=${lon}` +
-  `&daily=sunshine_duration,temperature_2m_max,uv_index_max,wind_speed_10m_max` +
+  `&daily=sunshine_duration,temperature_2m_max` +
   `&timezone=${encodeURIComponent(timezone)}` +
   `&forecast_days=${FORECAST_DAYS}`;
 
@@ -25,8 +26,7 @@ export const computeCityMetrics = (city, dailyData) => {
   const {
     sunshine_duration,
     temperature_2m_max,
-    uv_index_max,
-    wind_speed_10m_max
+    uv_index_max
   } = dailyData;
 
   // 1. Zonuren
@@ -39,14 +39,11 @@ export const computeCityMetrics = (city, dailyData) => {
   // 3. Max UV
   const maxUV = Math.max(...uv_index_max);
 
-  // 4. Max Wind
-  const maxWind = Math.max(...wind_speed_10m_max);
-
   return {
     name: city.name,
+    shortName: city.shortName,
     averageHours: parseFloat(averageHours.toFixed(2)),
     maxTemp,
-    maxUV,
-    maxWind
+    maxUV
   };
 };

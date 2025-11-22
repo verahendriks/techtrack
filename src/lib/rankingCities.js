@@ -66,15 +66,14 @@ export async function getSunshineRanking() {
         const data = await response.json();
 
       if (data.daily?.sunshine_duration != null) {
-          const { name, averageHours, maxUV, maxTemp, maxWind } = computeCityMetrics(city, data.daily);
+          const { name, shortName, averageHours, maxUV, maxTemp } = computeCityMetrics(city, data.daily);
           
           return {
             name,
+            shortName,
             averageHours,
             maxUV,
-            maxTemp,
-            maxWind,
-            rawData: data
+            maxTemp
           };        
         }
       } catch (error) {

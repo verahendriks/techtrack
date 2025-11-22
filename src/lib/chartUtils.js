@@ -13,7 +13,8 @@ export function formatDate(dateString) {
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) return "";
   return date.toLocaleDateString("nl-NL", {
+    weekday: "short",
     day: "numeric",
-    month: "long",
+    month: "short",
   });
 }

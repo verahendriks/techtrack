@@ -4,7 +4,7 @@
   import { formatDuration, formatDate } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
 
   export let data; // Input van dataset
-  export let height = 400; // Hoogte van de grafiek
+  export let height = 500; // Hoogte van de grafiek
 
   export let selectedMetric = "averageHours";
   export let yLabel = "Gemiddelde zonuren";
@@ -19,7 +19,7 @@
   };
 
   // Marges rondom de grafiek
-  const MARGIN = { top: 20, right: 30, bottom: 100, left: 70 };
+  const MARGIN = { top: 25, right: 30, bottom: 50, left: 100 };
 
   // Hoofd-functie die de grafiek tekent of opnieuw rendert
   function drawChart(chartData) {
@@ -42,18 +42,18 @@
       .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
     // Schalen voor X-as en Y-as
-    const xScale = d3
+    const yScale = d3
       .scaleBand()
-      .domain(chartData.map((d) => d.name))
-      .range([0, CHART_WIDTH])
+      .domain(chartData.map((d) => d.shortName))
+      .range([0, CHART_HEIGHT])
       .padding(0.2);
 
     const maxValue = d3.max(chartData, (d) => d[selectedMetric]);
 
-    const yScale = d3
+    const xScale = d3
       .scaleLinear()
       .domain([0, maxValue * 1.1])
-      .range([CHART_HEIGHT, 0]);
+      .range([0, CHART_WIDTH]);
 
     const tooltip = d3.select("#d3-tooltip");
 
@@ -62,10 +62,11 @@
       .selectAll("rect")
       .data(chartData, (d) => d.name)
       .join("rect")
-      .attr("x", (d) => xScale(d.name))
-      .attr("y", CHART_HEIGHT) // Start onderaan (voor animatie)
-      .attr("width", xScale.bandwidth())
-      .attr("fill", colors[selectedMetric] || "#FEA600") // Kleur op basis van gekozen modus
+      .attr("x", 0)
+      .attr("y", (d) => yScale(d.shortName))
+      .attr("height", yScale.bandwidth())
+      .attr("width", 0)
+      .attr("fill", colors[selectedMetric] || "#FEA600")
 
       // Interactie: hover, move, leave
       .on("mouseover", function () {
@@ -103,8 +104,7 @@
       // Animatie bij het laden
       .transition()
       .duration(800)
-      .attr("y", (d) => yScale(d[selectedMetric]))
-      .attr("height", (d) => CHART_HEIGHT - yScale(d[selectedMetric]));
+      .attr("width", (d) => xScale(d[selectedMetric]));
 
     // Assen tekenen
     svg
@@ -112,7 +112,6 @@
       .attr("transform", `translate(0,${CHART_HEIGHT})`)
       .call(d3.axisBottom(xScale))
       .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
     svg.append("g").call(d3.axisLeft(yScale));
@@ -148,7 +147,6 @@
             <th>Zonuren</th>
             <th>Max Temp</th>
             <th>Max UV</th>
-            <th>Max Wind</th>
           </tr>
         </thead>
         <tbody>
@@ -165,9 +163,6 @@
               >
               <td>{selectedCity.rawData.daily.temperature_2m_max[index]} °C</td>
               <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
-              <td
-                >{selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h</td
-              >
             </tr>
           {/each}
         </tbody>
