@@ -17,7 +17,7 @@ export const featureToCity = ({ properties, geometry }) => {
 // Bouwt de volledige API URL voor een stad
 export const buildApiUrl = ({ lat, lon, timezone }, API_BASE_URL) =>
   `${API_BASE_URL}?latitude=${lat}&longitude=${lon}` +
-  `&daily=sunshine_duration,temperature_2m_max` +
+  `&daily=sunshine_duration,temperature_2m_max,uv_index_max` +
   `&timezone=${encodeURIComponent(timezone)}` +
   `&forecast_days=${FORECAST_DAYS}`;
 

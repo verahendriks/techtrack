@@ -73,7 +73,8 @@ export async function getSunshineRanking() {
             shortName,
             averageHours,
             maxUV,
-            maxTemp
+            maxTemp,
+            rawData: data
           };        
         }
       } catch (error) {
