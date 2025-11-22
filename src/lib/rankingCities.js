@@ -65,13 +65,16 @@ export async function getSunshineRanking() {
 
         const data = await response.json();
 
-        if (data.daily?.sunshine_duration != null) {
-          const { name, averageHours, maxUV } = computeCityMetrics(city, data.daily);
+      if (data.daily?.sunshine_duration != null) {
+          const { name, averageHours, maxUV, maxTemp, maxWind } = computeCityMetrics(city, data.daily);
+          
           return {
             name,
             averageHours,
             maxUV,
-            rawData: data 
+            maxTemp,
+            maxWind,
+            rawData: data
           };        
         }
       } catch (error) {
@@ -83,19 +86,18 @@ export async function getSunshineRanking() {
     // Parallelle uitvoering
     const results = await Promise.all(cities.map(fetchCityData));
 
-    // 3. Sorteer en cache resultaat
-    const top10 = results
+// 3. Sorteer en cache resultaat
+    const allResults = results
       .filter(Boolean)
-      .sort((a, b) => b.averageHours - a.averageHours)
-      .slice(0, 10);
+      .sort((a, b) => b.averageHours - a.averageHours); // Standaard sorteren op zon
 
-    // Alleen opslaan als we daadwerkelijk data hebben
-    if (top10.length > 0) {
+    // We noemen het nu allResults ipv top10, en we slicen NIET meer!
+    if (allResults.length > 0) {
       localStorage.setItem(
         CACHE_KEY,
-        JSON.stringify({ timestamp: now, data: top10 })
+        JSON.stringify({ timestamp: now, data: allResults })
       );
-      return top10;
+      return allResults; // <--- Geef ALLES terug
     } else {
        throw new Error("Geen resultaten uit API gekomen");
     }

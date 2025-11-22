@@ -14,7 +14,7 @@ export const API_BASE_URL = "https://api.open-meteo.com/v1/forecast";
 export const CACHE_EXPIRY_MS = 60 * 60 * 1000;
 
 // Sleutelnaam voor opslag van cache
-export const CACHE_KEY = "sunshine_ranking_cache";
+export const CACHE_KEY = "ranking_cache";
 
 // Vertraging tussen opeenvolgende API-aanroepen (in milliseconden)
 export const API_CALL_DELAY_MS = 110;

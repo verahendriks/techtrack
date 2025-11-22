@@ -6,8 +6,17 @@
   export let data; // Input van dataset
   export let height = 400; // Hoogte van de grafiek
 
+  export let selectedMetric = "averageHours";
+  export let yLabel = "Gemiddelde zonuren";
+
   let selectedCity = null; // Geselecteerde stad voor detailpaneel
   let svgContainer; // DOM-container waar de SVG wordt geplaatst
+
+  const colors = {
+    averageHours: "#FEA600",
+    maxTemp: "#FF4500",
+    maxUV: "#000000",
+  };
 
   // Marges rondom de grafiek
   const MARGIN = { top: 20, right: 30, bottom: 100, left: 70 };
@@ -39,16 +48,12 @@
       .range([0, CHART_WIDTH])
       .padding(0.2);
 
+    const maxValue = d3.max(chartData, (d) => d[selectedMetric]);
+
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(chartData, (d) => d.averageHours) * 1.1])
-      .range([CHART_HEIGHT, MARGIN.top]);
-
-    // Kleurschaal gebaseerd op UV-index
-    const colorScale = d3
-      .scaleThreshold()
-      .domain([3, 5])
-      .range(["#FEA600", "#FF6B01", "#FF2D00"]);
+      .domain([0, maxValue * 1.1])
+      .range([CHART_HEIGHT, 0]);
 
     const tooltip = d3.select("#d3-tooltip");
 
@@ -60,7 +65,7 @@
       .attr("x", (d) => xScale(d.name))
       .attr("y", CHART_HEIGHT) // Start onderaan (voor animatie)
       .attr("width", xScale.bandwidth())
-      .attr("fill", (d) => colorScale(d.maxUV))
+      .attr("fill", colors[selectedMetric] || "#FEA600") // Kleur op basis van gekozen modus
 
       // Interactie: hover, move, leave
       .on("mouseover", function () {
@@ -68,10 +73,17 @@
         tooltip.style("opacity", 1);
       })
       .on("mousemove", function (event, d) {
-        tooltip
-          .html(`Max. UV Index: <b>${d.maxUV}</b>`)
-          .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 28}px`);
+        let val = d[selectedMetric];
+        let unit = "";
+        if (selectedMetric === "averageHours") {
+          val = val.toFixed(1);
+          unit = " uur";
+        }
+        if (selectedMetric === "maxTemp") unit = " °C";
+        if (selectedMetric === "totalPrecip") unit = " mm";
+        if (selectedMetric === "maxUV") unit = "";
+
+        tooltip.html(`<b>${d.name}</b><br/>${yLabel}: ${val}${unit}`);
       })
       .on("mouseout", function () {
         d3.select(this).style("opacity", 1);
@@ -81,40 +93,33 @@
       // Klikken: detailpaneel openen
       .on("click", (_, d) => {
         selectedCity = d;
+        setTimeout(() => {
+          document
+            .querySelector(".detail-panel")
+            ?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
       })
 
       // Animatie bij het laden
       .transition()
       .duration(800)
-      .attr("y", (d) => yScale(d.averageHours))
-      .attr("height", (d) => CHART_HEIGHT - yScale(d.averageHours));
+      .attr("y", (d) => yScale(d[selectedMetric]))
+      .attr("height", (d) => CHART_HEIGHT - yScale(d[selectedMetric]));
 
-    // X-as tekenen
+    // Assen tekenen
     svg
       .append("g")
-      .attr("class", "x-axis")
       .attr("transform", `translate(0,${CHART_HEIGHT})`)
       .call(d3.axisBottom(xScale))
       .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
-    // Y-as tekenen
-    svg
-      .append("g")
-      .attr("class", "y-axis")
-      .call(d3.axisLeft(yScale).ticks(5))
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", -70)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .style("fill", "black")
-      .text("Gemiddelde zonuren per dag");
+    svg.append("g").call(d3.axisLeft(yScale));
   }
 
   // Automatisch opnieuw tekenen wanneer data verandert
-  $: if (data && svgContainer) {
+  $: if (data && svgContainer && selectedMetric && yLabel) {
     drawChart(data);
   }
 </script>
@@ -134,7 +139,6 @@
       </button>
 
       <h3>Weersvoorspelling voor {selectedCity.name}</h3>
-      <p>Gemiddeld {selectedCity.averageHours.toFixed(0)} uur zon per dag</p>
 
       <!-- Tabel met gedetailleerde daginformatie -->
       <table>
@@ -142,7 +146,9 @@
           <tr>
             <th>Datum</th>
             <th>Zonuren</th>
-            <th>Max UV Index</th>
+            <th>Max Temp</th>
+            <th>Max UV</th>
+            <th>Max Wind</th>
           </tr>
         </thead>
         <tbody>
@@ -157,7 +163,11 @@
                   selectedCity.rawData.daily.sunshine_duration[index]
                 )}</td
               >
+              <td>{selectedCity.rawData.daily.temperature_2m_max[index]} °C</td>
               <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
+              <td
+                >{selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h</td
+              >
             </tr>
           {/each}
         </tbody>

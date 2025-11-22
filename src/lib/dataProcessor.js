@@ -16,24 +16,37 @@ export const featureToCity = ({ properties, geometry }) => {
 // Bouwt de volledige API URL voor een stad
 export const buildApiUrl = ({ lat, lon, timezone }, API_BASE_URL) =>
   `${API_BASE_URL}?latitude=${lat}&longitude=${lon}` +
-  `&daily=sunshine_duration,uv_index_max` +
+  `&daily=sunshine_duration,temperature_2m_max,uv_index_max,wind_speed_10m_max` +
   `&timezone=${encodeURIComponent(timezone)}` +
   `&forecast_days=${FORECAST_DAYS}`;
 
-// Berekent gemiddelde zonuren en maximale UV-index voor een stad
-export const computeCityMetrics = (city, { sunshine_duration, uv_index_max }) => {
-  // Totale zonneschijn in seconden
-  const totalSunshineSeconds = sunshine_duration.reduce((sum, v) => sum + v, 0);
+// Berekent statistieken voor een stad
+export const computeCityMetrics = (city, dailyData) => {
+  const {
+    sunshine_duration,
+    temperature_2m_max,
+    uv_index_max,
+    wind_speed_10m_max
+  } = dailyData;
 
-  // Gemiddelde zonuren per dag
+  // 1. Zonuren
+  const totalSunshineSeconds = sunshine_duration.reduce((sum, v) => sum + v, 0);
   const averageHours = totalSunshineSeconds / FORECAST_DAYS / SECONDS_PER_HOUR;
 
-  // Hoogste UV-waarde
+  // 2. Max Temperatuur
+  const maxTemp = Math.max(...temperature_2m_max);
+
+  // 3. Max UV
   const maxUV = Math.max(...uv_index_max);
+
+  // 4. Max Wind
+  const maxWind = Math.max(...wind_speed_10m_max);
 
   return {
     name: city.name,
-    averageHours: parseFloat(averageHours.toFixed(2)), // afgerond op 2 decimalen
+    averageHours: parseFloat(averageHours.toFixed(2)),
+    maxTemp,
     maxUV,
+    maxWind
   };
 };
