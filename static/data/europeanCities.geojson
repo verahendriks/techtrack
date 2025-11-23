@@ -297,7 +297,7 @@
       },
       "properties": {
         "city": "Valletta",
-        "country": "Malta (Malta)",
+        "country": "Malta",
         "timezone": "Europe/Malta"
       }
     },
@@ -309,7 +309,7 @@
       },
       "properties": {
         "city": "Limassol",
-        "country": "Cyprus (Cyprus)",
+        "country": "Cyprus",
         "timezone": "Asia/Nicosia"
       }
     },
