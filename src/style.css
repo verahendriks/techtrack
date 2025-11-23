@@ -105,6 +105,25 @@ button.active {
   position: relative;
 }
 
+.d3-container .axis-y text {
+  font-size: 1.4em;
+  font-weight: 600;
+  fill: var(--text-color);
+}
+
+.grid-lines line {
+  stroke: #e0e0e0;
+  stroke-dasharray: 4;
+}
+
+.d3-container text {
+  fill: var(--text-color);
+}
+
+.bar {
+  cursor: pointer;
+}
+
 #d3-tooltip {
   position: absolute;
   z-index: 1000;
