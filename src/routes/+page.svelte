@@ -56,7 +56,9 @@
 <main>
   <div class="header-group">
     <h1>Waar in Europa moet ik heen om te bakken? 🥵🏝️🍹🌞</h1>
-    <p>Last minute op vakantie? Bekijk hier de ideale zonbestemming!</p>
+    <p class="subtitle">
+      Last minute op vakantie? Bekijk hier de ideale zonbestemming!
+    </p>
   </div>
 
   {#if loadingError}
@@ -89,6 +91,7 @@
 
     <div class="chart-container">
       <h2>Top 10: {currentLabel}</h2>
+      <p class="subtitle">Test</p>
 
       <BarChart
         data={top10Data}

@@ -1,7 +1,11 @@
 <script>
   // --- Imports ---
   import * as d3 from "d3"; // D3 voor data-visualisatie
-  import { formatDuration, formatDate } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
+  import {
+    formatDuration,
+    formatDate,
+    kmhToBeaufort,
+  } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
 
   export let data; // Input van dataset
   export let height = 500; // Hoogte van de grafiek
@@ -19,7 +23,7 @@
   };
 
   // Marges rondom de grafiek
-  const MARGIN = { top: 35, right: 15, bottom: 65, left: 145 };
+  const MARGIN = { top: 10, right: 15, bottom: 65, left: 145 };
 
   // Hoofd-functie die de grafiek tekent of opnieuw rendert
   function drawChart(chartData) {
@@ -91,16 +95,18 @@
       .on("mousemove", (event, d) => {
         let val = d[selectedMetric];
         let unit = "";
+        // Formatteren van zonuren
         if (selectedMetric === "averageHours") {
-          val = val.toFixed(1);
-          unit = " uur";
+          val = formatDuration(val * 3600);
         }
         if (selectedMetric === "maxTemp") unit = " °C";
-        if (selectedMetric === "maxUV") unit = "";
+
+        // Bereken de x en y positie BINNEN de container
+        const [x, y] = d3.pointer(event, svgContainer.parentElement);
 
         tooltip
-          .style("left", event.pageX + 15 + "px")
-          .style("top", event.pageY - 15 + "px")
+          .style("left", x + 10 + "px")
+          .style("top", y + 25 + "px")
           .html(`<b>${d.name}</b><br/>${yLabel}: ${val}${unit}`);
       })
       .on("mouseout", () => tooltip.style("opacity", 0))
@@ -159,15 +165,17 @@
       </button>
 
       <h3>Weersvoorspelling voor {selectedCity.name}</h3>
+      <p class="subtitle">De komende zeven dagen</p>
 
       <!-- Tabel met gedetailleerde daginformatie -->
       <table>
         <thead>
           <tr>
-            <th>Datum</th>
-            <th>Zonuren</th>
-            <th>Max Temp</th>
-            <th>Max UV</th>
+            <th>📅 Datum</th>
+            <th>☀️ Zonuren</th>
+            <th>🌡️ Temp</th>
+            <th>⛱️ UV</th>
+            <th>💨 Wind</th>
           </tr>
         </thead>
         <tbody>
@@ -182,8 +190,17 @@
                   selectedCity.rawData.daily.sunshine_duration[index]
                 )}</td
               >
-              <td>{selectedCity.rawData.daily.temperature_2m_max[index]} °C</td>
+              <td
+                >{selectedCity.rawData.daily.temperature_2m_min[index]} / {selectedCity
+                  .rawData.daily.temperature_2m_max[index]} °C</td
+              >
               <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
+              <td>
+                {selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h (Bft
+                {kmhToBeaufort(
+                  selectedCity.rawData.daily.wind_speed_10m_max[index]
+                )})</td
+              >
             </tr>
           {/each}
         </tbody>
