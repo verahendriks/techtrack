@@ -8,12 +8,13 @@
   } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
 
   export let data; // Input van dataset
-  export let height = 500; // Hoogte van de grafiek
+  export let height = 450; // Hoogte van de grafiek
 
   export let selectedMetric = "averageHours";
   export let yLabel = "Meeste zonuren";
 
   let selectedCity = null; // Geselecteerde stad voor detailpaneel
+
   let svgContainer; // DOM-container waar de SVG wordt geplaatst
 
   const colors = {
@@ -23,12 +24,21 @@
   };
 
   // Marges rondom de grafiek
-  const MARGIN = { top: 20, right: 15, bottom: 50, left: 145 };
+  let MARGIN = { top: 20, right: 50, bottom: 50, left: 150 };
 
   // Hoofd-functie die de grafiek tekent of opnieuw rendert
   function drawChart(chartData) {
     // Stop direct als de container nog niet bestaat of er geen data is
     if (!svgContainer || !chartData?.length) return;
+
+    const maxNameLength = d3.max(
+      chartData,
+      (d) => (d.shortName || d.name).length
+    );
+
+    const requiredMargin = Math.max(110, Math.min(250, maxNameLength * 9));
+
+    MARGIN.left = requiredMargin;
 
     // Bereken de beschikbare ruimte binnen de container
     const containerWidth = svgContainer.clientWidth;
@@ -56,7 +66,7 @@
 
     const xScale = d3
       .scaleLinear()
-      .domain([0, maxValue * 1.1])
+      .domain([0, maxValue])
       .range([0, CHART_WIDTH]);
 
     // Gridlijnen toevoegen
@@ -158,7 +168,7 @@
           document
             .querySelector(".detail-panel")
             ?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+        }, 10);
       })
       .transition()
       .duration(1000)
@@ -264,7 +274,7 @@
               on:mousemove={(e) =>
                 showTableTooltip(
                   e,
-                  "<b>UV-index</b><br>De maximale UV-straling van de zon. Hoe hoger het getal, hoe sneller je verbrandt."
+                  "<b>UV-index</b><br>De maximale kracht van de zon. Hoe hoger het getal, hoe sneller je verbrandt (smeer je goed in)!"
                 )}
               on:mouseleave={hideTableTooltip}
             >

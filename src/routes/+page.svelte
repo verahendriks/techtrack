@@ -1,7 +1,7 @@
 <script>
   // --- Imports ---
   import { onMount } from "svelte"; // Hook die wordt uitgevoerd zodra de component in de browser wordt weergegeven
-  import { getSunshineRanking } from "$lib/rankingCities"; // Asynchrone service voor data ophalen
+  import { getRanking } from "$lib/rankingCities"; // Asynchrone service voor data ophalen
   import BarChart from "../components/barChart.svelte"; // Visualisatiecomponent
 
   let allCitiesData = []; // Hier worden alle steden bewaard
@@ -21,7 +21,7 @@
   onMount(async () => {
     try {
       // Haal alle steden op
-      const results = await getSunshineRanking();
+      const results = await getRanking();
       allCitiesData = results;
 
       // Maak direct de eerste ranking
@@ -79,7 +79,9 @@
   {#if loadingError}
     <p style="color: red;">{loadingError}</p>
   {:else if loading}
-    <p>Even geduld, de weersvoorspelling wordt geladen...</p>
+    <div class="loading-container">
+      <div class="spinner"></div>
+    </div>
   {:else}
     <div class="controls">
       <button

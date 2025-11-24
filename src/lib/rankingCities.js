@@ -24,7 +24,7 @@ async function prepareCities() {
 }
 
 // Haalt weerdata op en creëert de Top 10 ranking
-export async function getSunshineRanking() {
+export async function getRanking() {
   const now = Date.now();
   let expiredData = null;
 
@@ -103,7 +103,7 @@ export async function getSunshineRanking() {
     }
 
   } catch (e) {
-    console.log("Fout in getSunshineRanking:", e);
+    console.log("Fout in getRanking:", e);
     
     // Fallback: toon verlopen cache als API faalt
     if (expiredData) {
