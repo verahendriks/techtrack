@@ -242,3 +242,73 @@ tr:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* =========================================
+   8. Search bar
+   ========================================= */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5em;
+  gap: 1em;
+}
+
+.header-text h3 { margin: 0 0 0.2em 0; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-actions .close-button {
+  position: static; 
+  width: 32px; height: 32px;
+  font-size: 1.4rem;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.mini-search { position: relative; }
+
+.mini-search input {
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 0.9em;
+  outline: none;
+  width: 140px;
+  transition: width 0.2s;
+}
+
+.mini-search input:focus {
+  width: 180px;
+  border-color: #FFBC23;
+}
+
+.mini-results {
+  position: absolute;
+  top: 110%; right: 0;
+  width: 220px;
+  background: white;
+  list-style: none;
+  padding: 0; margin: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  border: 1px solid #eee;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mini-results button {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 15px; font-size: 0.9em;
+  background: none; border: none;
+  border-bottom: 1px solid #f9f9f9;
+  cursor: pointer; color: #333;
+}
+
+.mini-results button:hover {
+  background: #fff8e1;
+}

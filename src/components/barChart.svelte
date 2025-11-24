@@ -1,5 +1,6 @@
 <script>
   // --- Imports ---
+  import { onMount } from "svelte";
   import * as d3 from "d3"; // D3 voor data-visualisatie
   import {
     formatDuration,
@@ -7,13 +8,19 @@
     kmhToBeaufort,
   } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
 
+  import { loadSearchCities, fetchSingleCityWeather } from "$lib/rankingCities";
+
   export let data; // Input van dataset
   export let height = 450; // Hoogte van de grafiek
 
   export let selectedMetric = "averageHours";
   export let yLabel = "Meeste zonuren";
 
-  let selectedCity = null; // Geselecteerde stad voor detailpaneel
+  export let selectedCity = null; // Geselecteerde stad voor detailpaneel
+
+  let searchList = []; // Alle stadsnamen
+  let searchTerm = ""; // Wat typ je nu
+  let searchResults = []; // De lijst met suggesties
 
   let svgContainer; // DOM-container waar de SVG wordt geplaatst
 
@@ -25,6 +32,35 @@
 
   // Marges rondom de grafiek
   let MARGIN = { top: 20, right: 50, bottom: 50, left: 150 };
+
+  // Laad de lijst met namen zodra de grafiek laadt
+  onMount(async () => {
+    searchList = await loadSearchCities();
+  });
+
+  // Zoekfunctie: filtert terwijl je typt
+  $: if (searchTerm.length > 0) {
+    searchResults = searchList
+      .filter((city) =>
+        city.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .slice(0, 5); // Max 5 resultaten
+  } else {
+    searchResults = [];
+  }
+
+  // Actie als je een stad aanklikt
+  async function switchCity(city) {
+    searchTerm = "";
+    searchResults = [];
+
+    // Haal 'live' de data op voor de nieuwe stad
+    const newData = await fetchSingleCityWeather(city);
+
+    if (newData) {
+      selectedCity = newData; // Dit ververst direct de tabel
+    }
+  }
 
   // Hoofd-functie die de grafiek tekent of opnieuw rendert
   function drawChart(chartData) {
@@ -217,23 +253,43 @@
 </script>
 
 <div class="d3-container">
-  <!-- SVG-container.
-   Deze lege <div> wordt via bind:this gekoppeld aan "svgContainer".
-   D3 vult deze container later met een dynamisch gegenereerde SVG. -->
   <div bind:this={svgContainer}></div>
 
   <div id="d3-tooltip"></div>
 
-  {#if selectedCity}
+  {#if selectedCity && selectedCity.rawData}
     <div class="detail-panel">
-      <button class="close-button" on:click={() => (selectedCity = null)}>
-        &times;
-      </button>
+      <div class="panel-header">
+        <div class="header-text">
+          <h3>Weersvoorspelling: {selectedCity.name}</h3>
+          <p class="subtitle">Verwachting voor de komende zeven dagen</p>
+        </div>
 
-      <h3>Weersvoorspelling: {selectedCity.name}</h3>
-      <p class="subtitle">De weersvoorspelling voor de komende zeven dagen</p>
+        <div class="header-actions">
+          <div class="mini-search">
+            <input
+              type="text"
+              placeholder="🔍 Andere stad..."
+              bind:value={searchTerm}
+            />
 
-      <!-- Tabel met gedetailleerde daginformatie -->
+            {#if searchResults.length > 0}
+              <ul class="mini-results">
+                {#each searchResults as city}
+                  <button on:click={() => switchCity(city)}>
+                    {city.name}
+                  </button>
+                {/each}
+              </ul>
+            {/if}
+          </div>
+
+          <button class="close-button" on:click={() => (selectedCity = null)}>
+            &times;
+          </button>
+        </div>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -294,28 +350,33 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Loop door alle dagen heen.
-           "index" wordt gebruikt om bijbehorende arrays (sunshine_duration, uv_index_max)
-           op dezelfde positie uit te lezen. -->
           {#each selectedCity.rawData.daily.time as date, index}
             <tr>
               <td>{formatDate(date)}</td>
-              <td
-                >{formatDuration(
+              <td>
+                {formatDuration(
                   selectedCity.rawData.daily.sunshine_duration[index]
-                )}</td
-              >
-              <td
-                >{selectedCity.rawData.daily.temperature_2m_min[index]} / {selectedCity
-                  .rawData.daily.temperature_2m_max[index]} °C</td
-              >
+                )}
+              </td>
+              <td>
+                {#if selectedCity.rawData.daily.temperature_2m_min}
+                  {selectedCity.rawData.daily.temperature_2m_min[index]} /
+                  {selectedCity.rawData.daily.temperature_2m_max[index]} °C
+                {:else}
+                  {selectedCity.rawData.daily.temperature_2m_max[index]} °C
+                {/if}
+              </td>
               <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
               <td>
-                {selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h (Bft
-                {kmhToBeaufort(
-                  selectedCity.rawData.daily.wind_speed_10m_max[index]
-                )})</td
-              >
+                {#if selectedCity.rawData.daily.wind_speed_10m_max}
+                  {selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h (Bft
+                  {kmhToBeaufort(
+                    selectedCity.rawData.daily.wind_speed_10m_max[index]
+                  )})
+                {:else}
+                  -
+                {/if}
+              </td>
             </tr>
           {/each}
         </tbody>

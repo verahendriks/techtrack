@@ -7,6 +7,9 @@ export const SECONDS_PER_HOUR = 3600;
 // Pad naar het GeoJSON-bestand met Europese steden
 export const GEOJSON_FILE = "/data/europeanCities.geojson";
 
+// Pad naar het GeoJSON-bestand met Europese steden
+export const SEARCH_FILE = "/data/searchCities.geojson";
+
 // Basis-URL van de externe Open-Meteo API
 export const API_BASE_URL = "https://api.open-meteo.com/v1/forecast";
 

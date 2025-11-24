@@ -1,0 +1,645 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 4.9041, 52.3676 ] },
+      "properties": { "city": "Amsterdam", "country": "Nederland", "timezone": "Europe/Amsterdam" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 4.4777, 51.9244 ] },
+      "properties": { "city": "Rotterdam", "country": "Nederland", "timezone": "Europe/Amsterdam" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 4.3007, 52.0705 ] },
+      "properties": { "city": "Den Haag", "country": "Nederland", "timezone": "Europe/Amsterdam" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 3.5736, 51.4425 ] },
+      "properties": { "city": "Vlissingen", "country": "Nederland", "timezone": "Europe/Amsterdam" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 4.3517, 50.8503 ] },
+      "properties": { "city": "Brussel", "country": "België", "timezone": "Europe/Brussels" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 2.9288, 51.2154 ] },
+      "properties": { "city": "Oostende", "country": "België", "timezone": "Europe/Brussels" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.1278, 51.5074 ] },
+      "properties": { "city": "Londen", "country": "Verenigd Koninkrijk", "timezone": "Europe/London" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.1395, 50.8225 ] },
+      "properties": { "city": "Brighton", "country": "Verenigd Koninkrijk", "timezone": "Europe/London" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -3.1883, 55.9533 ] },
+      "properties": { "city": "Edinburgh", "country": "Verenigd Koninkrijk", "timezone": "Europe/London" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -6.2603, 53.3498 ] },
+      "properties": { "city": "Dublin", "country": "Ierland", "timezone": "Europe/Dublin" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -8.4756, 51.8985 ] },
+      "properties": { "city": "Cork", "country": "Ierland", "timezone": "Europe/Dublin" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 12.5683, 55.6761 ] },
+      "properties": { "city": "Kopenhagen", "country": "Denemarken", "timezone": "Europe/Copenhagen" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 10.2039, 56.1629 ] },
+      "properties": { "city": "Aarhus", "country": "Denemarken", "timezone": "Europe/Copenhagen" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 18.0686, 59.3293 ] },
+      "properties": { "city": "Stockholm", "country": "Zweden", "timezone": "Europe/Stockholm" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 11.9746, 57.7089 ] },
+      "properties": { "city": "Gotenburg", "country": "Zweden", "timezone": "Europe/Stockholm" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.0038, 55.6050 ] },
+      "properties": { "city": "Malmö", "country": "Zweden", "timezone": "Europe/Stockholm" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 10.7522, 59.9139 ] },
+      "properties": { "city": "Oslo", "country": "Noorwegen", "timezone": "Europe/Oslo" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 5.3221, 60.3913 ] },
+      "properties": { "city": "Bergen", "country": "Noorwegen", "timezone": "Europe/Oslo" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 5.7331, 58.9690 ] },
+      "properties": { "city": "Stavanger", "country": "Noorwegen", "timezone": "Europe/Oslo" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 24.9384, 60.1699 ] },
+      "properties": { "city": "Helsinki", "country": "Finland", "timezone": "Europe/Helsinki" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 22.2666, 60.4518 ] },
+      "properties": { "city": "Turku", "country": "Finland", "timezone": "Europe/Helsinki" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -21.8277, 64.1283 ] },
+      "properties": { "city": "Reykjavik", "country": "IJsland", "timezone": "Atlantic/Reykjavik" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 2.3522, 48.8566 ] },
+      "properties": { "city": "Parijs", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.5792, 44.8378 ] },
+      "properties": { "city": "Bordeaux", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -1.5536, 47.2184 ] },
+      "properties": { "city": "Nantes", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -1.1511, 46.1603 ] },
+      "properties": { "city": "La Rochelle", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -1.5586, 43.4832 ] },
+      "properties": { "city": "Biarritz", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -2.0260, 48.6493 ] },
+      "properties": { "city": "Saint-Malo", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -1.9812, 43.3183 ] },
+      "properties": { "city": "San Sebastian", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -2.9350, 43.2630 ] },
+      "properties": { "city": "Bilbao", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -3.8099, 43.4623 ] },
+      "properties": { "city": "Santander", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -8.4115, 43.3623 ] },
+      "properties": { "city": "A Coruña", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -8.7207, 42.2406 ] },
+      "properties": { "city": "Vigo", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -8.6110, 41.1496 ] },
+      "properties": { "city": "Porto", "country": "Portugal", "timezone": "Europe/Lisbon" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -9.1393, 38.7223 ] },
+      "properties": { "city": "Lissabon", "country": "Portugal", "timezone": "Europe/Lisbon" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -8.6719, 37.1028 ] },
+      "properties": { "city": "Lagos", "country": "Portugal", "timezone": "Europe/Lisbon" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -7.9304, 37.0194 ] },
+      "properties": { "city": "Faro", "country": "Portugal", "timezone": "Europe/Lisbon" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -6.2886, 36.5271 ] },
+      "properties": { "city": "Cádiz", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -4.4203, 36.7213 ] },
+      "properties": { "city": "Málaga", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -2.4597, 36.8340 ] },
+      "properties": { "city": "Almería", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.9819, 37.6257 ] },
+      "properties": { "city": "Cartagena", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.4907, 38.3452 ] },
+      "properties": { "city": "Alicante", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.1310, 38.5411 ] },
+      "properties": { "city": "Benidorm", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -0.3763, 39.4699 ] },
+      "properties": { "city": "Valencia", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 1.2445, 41.1189 ] },
+      "properties": { "city": "Tarragona", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 2.1734, 41.3851 ] },
+      "properties": { "city": "Barcelona", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 2.6502, 39.5696 ] },
+      "properties": { "city": "Palma de Mallorca", "country": "Spanje (Balearen)", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 1.4324, 38.9067 ] },
+      "properties": { "city": "Ibiza Stad", "country": "Spanje (Balearen)", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 4.2658, 39.8896 ] },
+      "properties": { "city": "Mahón", "country": "Spanje (Balearen)", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 3.8767, 43.6108 ] },
+      "properties": { "city": "Montpellier", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 5.3698, 43.2965 ] },
+      "properties": { "city": "Marseille", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 5.9303, 43.1242 ] },
+      "properties": { "city": "Toulon", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 7.2620, 43.7102 ] },
+      "properties": { "city": "Nice", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 7.0174, 43.5528 ] },
+      "properties": { "city": "Cannes", "country": "Frankrijk", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 8.7386, 41.9192 ] },
+      "properties": { "city": "Ajaccio", "country": "Frankrijk (Corsica)", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.4509, 42.7028 ] },
+      "properties": { "city": "Bastia", "country": "Frankrijk (Corsica)", "timezone": "Europe/Paris" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 7.4246, 43.7384 ] },
+      "properties": { "city": "Monaco", "country": "Monaco", "timezone": "Europe/Monaco" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 8.9463, 44.4056 ] },
+      "properties": { "city": "Genua", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.8292, 44.1025 ] },
+      "properties": { "city": "La Spezia", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 10.3106, 43.5485 ] },
+      "properties": { "city": "Livorno", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 12.4964, 41.9028 ] },
+      "properties": { "city": "Rome", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 14.2681, 40.8518 ] },
+      "properties": { "city": "Napels", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 14.7681, 40.6824 ] },
+      "properties": { "city": "Salerno", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.3615, 38.1157 ] },
+      "properties": { "city": "Palermo", "country": "Italië (Sicilië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 15.0830, 37.5079 ] },
+      "properties": { "city": "Catania", "country": "Italië (Sicilië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 15.2840, 37.0755 ] },
+      "properties": { "city": "Syracuse", "country": "Italië (Sicilië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.1346, 39.2310 ] },
+      "properties": { "city": "Cagliari", "country": "Italië (Sardinië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.4856, 40.9232 ] },
+      "properties": { "city": "Olbia", "country": "Italië (Sardinië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 8.3193, 40.5589 ] },
+      "properties": { "city": "Alghero", "country": "Italië (Sardinië)", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 15.6530, 38.1113 ] },
+      "properties": { "city": "Reggio Calabria", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 17.2470, 40.4644 ] },
+      "properties": { "city": "Taranto", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 16.8719, 41.1171 ] },
+      "properties": { "city": "Bari", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.5190, 43.6158 ] },
+      "properties": { "city": "Ancona", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 12.5695, 44.0678 ] },
+      "properties": { "city": "Rimini", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 12.3155, 45.4408 ] },
+      "properties": { "city": "Venetië", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.7768, 45.6495 ] },
+      "properties": { "city": "Triëst", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.7302, 45.5481 ] },
+      "properties": { "city": "Koper", "country": "Slovenië", "timezone": "Europe/Ljubljana" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.8481, 44.8666 ] },
+      "properties": { "city": "Pula", "country": "Kroatië", "timezone": "Europe/Zagreb" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 14.4423, 45.3271 ] },
+      "properties": { "city": "Rijeka", "country": "Kroatië", "timezone": "Europe/Zagreb" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 15.2314, 44.1194 ] },
+      "properties": { "city": "Zadar", "country": "Kroatië", "timezone": "Europe/Zagreb" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 16.4402, 43.5081 ] },
+      "properties": { "city": "Split", "country": "Kroatië", "timezone": "Europe/Zagreb" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 18.0944, 42.6507 ] },
+      "properties": { "city": "Dubrovnik", "country": "Kroatië", "timezone": "Europe/Zagreb" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 18.7712, 42.4247 ] },
+      "properties": { "city": "Kotor", "country": "Montenegro", "timezone": "Europe/Podgorica" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 18.8403, 42.2881 ] },
+      "properties": { "city": "Budva", "country": "Montenegro", "timezone": "Europe/Podgorica" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 19.4564, 41.3246 ] },
+      "properties": { "city": "Durrës", "country": "Albanië", "timezone": "Europe/Tirane" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 19.4897, 40.4661 ] },
+      "properties": { "city": "Vlorë", "country": "Albanië", "timezone": "Europe/Tirane" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 19.9260, 39.6243 ] },
+      "properties": { "city": "Corfu Stad", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 21.7346, 38.2466 ] },
+      "properties": { "city": "Patras", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 22.1142, 37.0422 ] },
+      "properties": { "city": "Kalamáta", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 23.7275, 37.9838 ] },
+      "properties": { "city": "Athene", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 22.9444, 40.6401 ] },
+      "properties": { "city": "Thessaloniki", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 24.4129, 40.9377 ] },
+      "properties": { "city": "Kavala", "country": "Griekenland", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 25.1442, 35.3387 ] },
+      "properties": { "city": "Heraklion", "country": "Griekenland (Kreta)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 24.0180, 35.5138 ] },
+      "properties": { "city": "Chania", "country": "Griekenland (Kreta)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 28.2270, 36.4341 ] },
+      "properties": { "city": "Rhodos Stad", "country": "Griekenland (Rhodos)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 27.2877, 36.8917 ] },
+      "properties": { "city": "Kos Stad", "country": "Griekenland (Kos)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 25.3289, 37.4467 ] },
+      "properties": { "city": "Mykonos Stad", "country": "Griekenland (Mykonos)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 25.4317, 36.4166 ] },
+      "properties": { "city": "Fira", "country": "Griekenland (Santorini)", "timezone": "Europe/Athens" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 27.1428, 38.4237 ] },
+      "properties": { "city": "Izmir", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 27.4305, 37.0341 ] },
+      "properties": { "city": "Bodrum", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 28.2709, 36.8550 ] },
+      "properties": { "city": "Marmaris", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 30.7133, 36.8969 ] },
+      "properties": { "city": "Antalya", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 31.9998, 36.5498 ] },
+      "properties": { "city": "Alanya", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 33.0226, 34.6841 ] },
+      "properties": { "city": "Limassol", "country": "Cyprus", "timezone": "Asia/Nicosia" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 32.4218, 34.7754 ] },
+      "properties": { "city": "Paphos", "country": "Cyprus", "timezone": "Asia/Nicosia" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 33.6292, 34.9111 ] },
+      "properties": { "city": "Larnaca", "country": "Cyprus", "timezone": "Asia/Nicosia" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 14.5146, 35.8989 ] },
+      "properties": { "city": "Valletta", "country": "Malta", "timezone": "Europe/Malta" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 28.6348, 44.1792 ] },
+      "properties": { "city": "Constanța", "country": "Roemenië", "timezone": "Europe/Bucharest" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 27.9147, 43.2141 ] },
+      "properties": { "city": "Varna", "country": "Bulgarije", "timezone": "Europe/Sofia" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 27.4626, 42.5048 ] },
+      "properties": { "city": "Burgas", "country": "Bulgarije", "timezone": "Europe/Sofia" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 28.9784, 41.0082 ] },
+      "properties": { "city": "Istanboel", "country": "Turkije", "timezone": "Europe/Istanbul" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 39.7233, 43.6028 ] },
+      "properties": { "city": "Sotsji", "country": "Rusland", "timezone": "Europe/Moscow" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -16.9085, 32.6669 ] },
+      "properties": { "city": "Funchal", "country": "Portugal (Madeira)", "timezone": "Atlantic/Madeira" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -25.6687, 37.7412 ] },
+      "properties": { "city": "Ponta Delgada", "country": "Portugal (Azoren)", "timezone": "Atlantic/Azores" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -15.4134, 28.0997 ] },
+      "properties": { "city": "Las Palmas", "country": "Spanje (Canarische Eilanden)", "timezone": "Atlantic/Canary" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -16.2518, 28.4636 ] },
+      "properties": { "city": "Santa Cruz de Tenerife", "country": "Spanje (Canarische Eilanden)", "timezone": "Atlantic/Canary" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 13.4050, 52.5200 ] },
+      "properties": { "city": "Berlijn", "country": "Duitsland", "timezone": "Europe/Berlin" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 11.5820, 48.1351 ] },
+      "properties": { "city": "München", "country": "Duitsland", "timezone": "Europe/Berlin" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.9937, 53.5511 ] },
+      "properties": { "city": "Hamburg", "country": "Duitsland", "timezone": "Europe/Berlin" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 16.3738, 48.2082 ] },
+      "properties": { "city": "Wenen", "country": "Oostenrijk", "timezone": "Europe/Vienna" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 8.5417, 47.3769 ] },
+      "properties": { "city": "Zürich", "country": "Zwitserland", "timezone": "Europe/Zurich" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 14.4378, 50.0755 ] },
+      "properties": { "city": "Praag", "country": "Tsjechië", "timezone": "Europe/Prague" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 19.0402, 47.4979 ] },
+      "properties": { "city": "Boedapest", "country": "Hongarije", "timezone": "Europe/Budapest" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ -3.7038, 40.4168 ] },
+      "properties": { "city": "Madrid", "country": "Spanje", "timezone": "Europe/Madrid" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 9.1900, 45.4642 ] },
+      "properties": { "city": "Milaan", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 11.2558, 43.7696 ] },
+      "properties": { "city": "Florence", "country": "Italië", "timezone": "Europe/Rome" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 26.1025, 44.4268 ] },
+      "properties": { "city": "Boekarest", "country": "Roemenië", "timezone": "Europe/Bucharest" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [ 21.0122, 52.2297 ] },
+      "properties": { "city": "Warschau", "country": "Polen", "timezone": "Europe/Warsaw" }
+    }
+  ]
+}

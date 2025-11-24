@@ -1,6 +1,7 @@
 // --- Imports ---
 import { 
   GEOJSON_FILE, 
+  SEARCH_FILE,
   API_BASE_URL,
   CACHE_EXPIRY_MS, 
   API_CALL_DELAY_MS, 
@@ -10,7 +11,7 @@ import {
 import { featureToCity, buildApiUrl, computeCityMetrics } from "./dataProcessor.js";
 
 // Haalt de stedenlijst op uit het GeoJSON-bestand
-async function prepareCities() {
+export async function prepareCities() {
   try {
     const response = await fetch(GEOJSON_FILE);
     if (!response.ok) throw new Error(`GeoJSON laadfout: ${response.status}`);
@@ -19,6 +20,18 @@ async function prepareCities() {
     return geojsonData.features.map(featureToCity);
   } catch (error) {
     console.error("Fout bij het voorbereiden van steden:", error);
+    return [];
+  }
+}
+
+export async function loadSearchCities() {
+  try {
+    const response = await fetch(SEARCH_FILE); // <--- Pakt het GROTE bestand
+    if (!response.ok) throw new Error(`Search GeoJSON fout: ${response.status}`);
+    const data = await response.json();
+    return data.features.map(featureToCity);
+  } catch (error) {
+    console.error("Fout bij zoeklijst:", error);
     return [];
   }
 }
@@ -66,7 +79,7 @@ export async function getRanking() {
         const data = await response.json();
 
       if (data.daily?.sunshine_duration != null) {
-          const { name, shortName, averageHours, maxUV, maxTemp } = computeCityMetrics(city, data.daily);
+          const { name, shortName, averageHours, maxUV, maxTemp, maxWind } = computeCityMetrics(city, data.daily);
           
           return {
             name,
@@ -74,6 +87,7 @@ export async function getRanking() {
             averageHours,
             maxUV,
             maxTemp,
+            maxWind,
             rawData: data
           };        
         }
@@ -114,4 +128,23 @@ export async function getRanking() {
     // Als er echt geen data is
     return []; 
   }
+}
+
+export async function fetchSingleCityWeather(city) {
+  try {
+    const apiUrl = buildApiUrl(city, API_BASE_URL);
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.daily) {
+      const metrics = computeCityMetrics(city, data.daily);
+      return {
+        ...metrics,
+        rawData: data
+      };
+    }
+  } catch (e) {
+    console.error("Fout bij ophalen specifiek weer:", e);
+  }
+  return null;
 }
