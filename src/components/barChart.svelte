@@ -1,13 +1,17 @@
 <script>
   // --- Imports ---
   import * as d3 from "d3"; // D3 voor data-visualisatie
-  import { formatDuration, formatDate } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
+  import {
+    formatDuration,
+    formatDate,
+    kmhToBeaufort,
+  } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
 
   export let data; // Input van dataset
   export let height = 500; // Hoogte van de grafiek
 
   export let selectedMetric = "averageHours";
-  export let yLabel = "Gemiddelde zonuren";
+  export let yLabel = "Meeste zonuren";
 
   let selectedCity = null; // Geselecteerde stad voor detailpaneel
   let svgContainer; // DOM-container waar de SVG wordt geplaatst
@@ -19,7 +23,7 @@
   };
 
   // Marges rondom de grafiek
-  const MARGIN = { top: 35, right: 15, bottom: 65, left: 145 };
+  const MARGIN = { top: 20, right: 15, bottom: 50, left: 145 };
 
   // Hoofd-functie die de grafiek tekent of opnieuw rendert
   function drawChart(chartData) {
@@ -89,19 +93,59 @@
       // Interactie
       .on("mouseover", () => tooltip.style("opacity", 1))
       .on("mousemove", (event, d) => {
-        let val = d[selectedMetric];
+        const rawValue = d[selectedMetric];
+
+        let val = rawValue;
         let unit = "";
+        let tooltipLabel = "";
+        let rating = "";
+
         if (selectedMetric === "averageHours") {
-          val = val.toFixed(1);
-          unit = " uur";
+          val = formatDuration(rawValue * 3600);
+          tooltipLabel = "Zonuren";
+
+          // Beoordeling voor Zonuren
+          if (rawValue < 5) rating = "☁️ Weinig";
+          else if (rawValue < 9) rating = "⛅ Redelijk";
+          else rating = "☀️ Veel zon";
         }
-        if (selectedMetric === "maxTemp") unit = " °C";
-        if (selectedMetric === "maxUV") unit = "";
+
+        if (selectedMetric === "maxTemp") {
+          unit = " °C";
+          tooltipLabel = "Temperatuur";
+
+          // Beoordeling voor Temperatuur
+          if (rawValue < 18) rating = "🧥 Fris";
+          else if (rawValue < 24) rating = "👕 Aangenaam";
+          else if (rawValue < 30) rating = "😎 Warm";
+          else rating = "🥵 Heet";
+        }
+
+        if (selectedMetric === "maxUV") {
+          unit = "";
+          tooltipLabel = "UV-Index";
+
+          // Beoordeling voor UV
+          if (rawValue < 3) rating = "🟢 Laag";
+          else if (rawValue < 6) rating = "🟡 Matig";
+          else if (rawValue < 8) rating = "🟠 Sterk";
+          else rating = "🔴 Zeer sterk";
+        }
+
+        const x = event.clientX;
+        const y = event.clientY;
 
         tooltip
-          .style("left", event.pageX + 15 + "px")
-          .style("top", event.pageY - 15 + "px")
-          .html(`<b>${d.name}</b><br/>${yLabel}: ${val}${unit}`);
+          .style("opacity", 1)
+          .html(
+            `
+            <b>${d.name}</b><br/>
+            ${tooltipLabel}: ${val}${unit}<br/>
+            ${rating}<br/>
+            <div class="tooltip-hint">👆 Klik voor details</div>`
+          )
+          .style("left", x + 15 + "px")
+          .style("top", y + 15 + "px");
       })
       .on("mouseout", () => tooltip.style("opacity", 0))
       .on("click", (event, d) => {
@@ -138,6 +182,24 @@
     yAxis.selectAll(".tick line").remove();
   }
 
+  // Helper functies voor de tabel-tooltip
+  function showTableTooltip(event, text) {
+    const tooltip = d3.select("#d3-tooltip");
+
+    const x = event.clientX;
+    const y = event.clientY;
+
+    tooltip
+      .style("opacity", 1)
+      .html(text)
+      .style("left", x + 15 + "px")
+      .style("top", y + 15 + "px");
+  }
+
+  function hideTableTooltip() {
+    d3.select("#d3-tooltip").style("opacity", 0);
+  }
+
   // Automatisch opnieuw tekenen wanneer data verandert
   $: if (data && svgContainer && selectedMetric && yLabel) {
     drawChart(data);
@@ -158,16 +220,67 @@
         &times;
       </button>
 
-      <h3>Weersvoorspelling voor {selectedCity.name}</h3>
+      <h3>Weersvoorspelling: {selectedCity.name}</h3>
+      <p class="subtitle">De weersvoorspelling voor de komende zeven dagen</p>
 
       <!-- Tabel met gedetailleerde daginformatie -->
       <table>
         <thead>
           <tr>
-            <th>Datum</th>
-            <th>Zonuren</th>
-            <th>Max Temp</th>
-            <th>Max UV</th>
+            <th
+              on:mousemove={(e) =>
+                showTableTooltip(
+                  e,
+                  "<b>Datum</b><br>De dag waarvoor deze weersvoorspelling geldt."
+                )}
+              on:mouseleave={hideTableTooltip}
+            >
+              📅 Datum
+            </th>
+
+            <th
+              on:mousemove={(e) =>
+                showTableTooltip(
+                  e,
+                  "<b>Zonuren</b><br>Het totaal aantal uren dat de zon naar verwachting zal schijnen."
+                )}
+              on:mouseleave={hideTableTooltip}
+            >
+              ☀️ Zonuren
+            </th>
+
+            <th
+              on:mousemove={(e) =>
+                showTableTooltip(
+                  e,
+                  "<b>Temperatuur</b><br>De laagste temperatuur ('s nachts) en de hoogste temperatuur (overdag)."
+                )}
+              on:mouseleave={hideTableTooltip}
+            >
+              🌡️ Temp
+            </th>
+
+            <th
+              on:mousemove={(e) =>
+                showTableTooltip(
+                  e,
+                  "<b>UV-index</b><br>De maximale UV-straling van de zon. Hoe hoger het getal, hoe sneller je verbrandt."
+                )}
+              on:mouseleave={hideTableTooltip}
+            >
+              ⛱️ UV
+            </th>
+
+            <th
+              on:mousemove={(e) =>
+                showTableTooltip(
+                  e,
+                  "<b>Windsnelheid</b><br>De maximale windsnelheid in km/h, met de windkracht (Beaufort) tussen haakjes."
+                )}
+              on:mouseleave={hideTableTooltip}
+            >
+              💨 Wind
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -182,8 +295,17 @@
                   selectedCity.rawData.daily.sunshine_duration[index]
                 )}</td
               >
-              <td>{selectedCity.rawData.daily.temperature_2m_max[index]} °C</td>
+              <td
+                >{selectedCity.rawData.daily.temperature_2m_min[index]} / {selectedCity
+                  .rawData.daily.temperature_2m_max[index]} °C</td
+              >
               <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
+              <td>
+                {selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h (Bft
+                {kmhToBeaufort(
+                  selectedCity.rawData.daily.wind_speed_10m_max[index]
+                )})</td
+              >
             </tr>
           {/each}
         </tbody>
