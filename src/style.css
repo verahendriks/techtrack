@@ -3,8 +3,8 @@
    ========================================= */
 :root {
   --bg-color: #ffe6cf;
-  --text-color: #333;
-  --subtitle-color: #666;
+  --text-color: #272727;
+  --subtitle-color: #424242;
   --accent-color: #ff6b6b;
   --accent-hover: #ff4757;
   --panel-bg: rgba(255, 255, 255, 0.6);
@@ -126,8 +126,8 @@ button.active {
 }
 
 #d3-tooltip {
-  position: absolute;
-  z-index: 1000;
+  position: fixed;
+  z-index: 9999;
   
   font-size: 0.9em;
   padding: 0.5em 0.8em;
@@ -139,7 +139,19 @@ button.active {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s;
-  white-space: nowrap;
+
+  min-width: 200px;
+  max-width: 225px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.tooltip-hint {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-style: italic;
+  text-align: center;
 }
 
 .detail-panel {
@@ -153,8 +165,7 @@ button.active {
 }
 
 .subtitle {
-  margin-top: -0.25em;
-  margin-bottom: 0.5em;
+  margin-top: -0.2em;
   color: var(--subtitle-color);
   font-size: 0.95em;
   font-weight: 400;

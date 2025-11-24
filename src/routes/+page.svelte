@@ -12,7 +12,10 @@
 
   // Huidige instelling (standaard op Zon)
   let currentMetric = "averageHours";
-  let currentLabel = "Gemiddelde zonuren";
+  let currentLabel = "Meeste zonuren";
+
+  let currentSubtitle =
+    "Het gemiddeld aantal zonuren per dag over de komende zeven dagen";
 
   // Wordt uitgevoerd zodra de component in de browser wordt weergegeven
   onMount(async () => {
@@ -35,6 +38,18 @@
   function setMetric(metric, label) {
     currentMetric = metric;
     currentLabel = label;
+
+    if (metric === "averageHours") {
+      currentSubtitle =
+        "Het gemiddeld aantal zonuren per dag over de komende zeven dagen";
+    } else if (metric === "maxTemp") {
+      currentSubtitle =
+        "De hoogst verwachte temperatuur in de komende zeven dagen";
+    } else if (metric === "maxUV") {
+      currentSubtitle =
+        "De maximale verwachte UV-index (zonkracht) in de komende zeven dagen";
+    }
+
     updateRanking();
   }
 
@@ -55,7 +70,7 @@
 
 <main>
   <div class="header-group">
-    <h1>Waar in Europa moet ik heen om te bakken? 🥵🏝️🍹🌞</h1>
+    <h1>Waar in Europa moet ik heen om te bakken? 🥵🏝️🍹☀️</h1>
     <p class="subtitle">
       Last minute op vakantie? Bekijk hier de ideale zonbestemming!
     </p>
@@ -69,14 +84,14 @@
     <div class="controls">
       <button
         class:active={currentMetric === "averageHours"}
-        on:click={() => setMetric("averageHours", "Gemiddelde zonuren")}
+        on:click={() => setMetric("averageHours", "Meeste zonuren")}
       >
         ☀️ Meeste Zon
       </button>
 
       <button
         class:active={currentMetric === "maxTemp"}
-        on:click={() => setMetric("maxTemp", "Hoogste Temperatuur")}
+        on:click={() => setMetric("maxTemp", "Hoogste temperatuur")}
       >
         🥵 Hoogste temperatuur
       </button>
@@ -91,7 +106,7 @@
 
     <div class="chart-container">
       <h2>Top 10: {currentLabel}</h2>
-      <p class="subtitle">Test</p>
+      <p class="subtitle">{currentSubtitle}</p>
 
       <BarChart
         data={top10Data}
