@@ -1,117 +1,180 @@
 <script>
-  // --- Imports ---
+  // ------------------------------------------------------------------
+  // Imports
+  // ------------------------------------------------------------------
   import { onMount } from "svelte";
-  import * as d3 from "d3"; // D3 voor data-visualisatie
+  import * as d3 from "d3";
   import {
     formatDuration,
     formatDate,
     kmhToBeaufort,
-  } from "$lib/chartUtils.js"; // Verzameling herbruikbare functies voor grafieken
-
+  } from "$lib/chartUtils.js";
   import { loadSearchCities, fetchSingleCityWeather } from "$lib/rankingCities";
 
-  export let data; // Input van dataset
-  export let height = 450; // Hoogte van de grafiek
-
+  // ------------------------------------------------------------------
+  // Props (Input van buitenaf)
+  // ------------------------------------------------------------------
+  export let data;
+  export let height = 450;
   export let selectedMetric = "averageHours";
   export let yLabel = "Meeste zonuren";
+  export let selectedCity = null;
 
-  export let selectedCity = null; // Geselecteerde stad voor detailpaneel
+  // ------------------------------------------------------------------
+  // Lokale Status (State)
+  // ------------------------------------------------------------------
+  let searchList = [];
+  let searchTerm = "";
+  let searchResults = [];
 
-  let searchList = []; // Alle stadsnamen
-  let searchTerm = ""; // Wat typ je nu
-  let searchResults = []; // De lijst met suggesties
+  // HTML Element referenties
+  let svgContainer;
+  let tooltipContainer;
 
-  let svgContainer; // DOM-container waar de SVG wordt geplaatst
-
+  // Configuratie
   const colors = {
     averageHours: "#FFBC23",
     maxTemp: "#F45023",
     maxUV: "#FF9219",
   };
 
-  // Marges rondom de grafiek
+  // Marges voor de grafiek
   let MARGIN = { top: 20, right: 50, bottom: 50, left: 150 };
 
-  // Laad de lijst met namen zodra de grafiek laadt
+  // ------------------------------------------------------------------
+  // Lifecycle & Reactivity
+  // ------------------------------------------------------------------
   onMount(async () => {
     searchList = await loadSearchCities();
   });
 
-  // Zoekfunctie: filtert terwijl je typt
+  // Zoekfunctie logica
   $: if (searchTerm.length > 0) {
     searchResults = searchList
       .filter((city) =>
         city.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      .slice(0, 5); // Max 5 resultaten
+      .slice(0, 5);
   } else {
     searchResults = [];
   }
 
-  // Actie als je een stad aanklikt
+  // Hertekenen als data verandert
+  $: if (data && svgContainer && selectedMetric && yLabel) {
+    drawChart(data);
+  }
+
+  // ------------------------------------------------------------------
+  // Interactie Functies
+  // ------------------------------------------------------------------
   async function switchCity(city) {
     searchTerm = "";
     searchResults = [];
-
-    // Haal 'live' de data op voor de nieuwe stad
     const newData = await fetchSingleCityWeather(city);
 
     if (newData) {
-      selectedCity = newData; // Dit ververst direct de tabel
+      selectedCity = newData;
+      // Scroll naar detailpaneel
+      setTimeout(() => {
+        document
+          .querySelector(".detail-panel")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 10);
     }
   }
 
-  // Hoofd-functie die de grafiek tekent of opnieuw rendert
+  // Helper: Bepaal tekst en label voor de tooltip
+  function getRatingAndLabel(dataPoint, metric) {
+    const value = dataPoint[metric];
+
+    if (metric === "averageHours") {
+      if (value < 5) return { rating: "☁️ Weinig", label: "Zonuren", unit: "" };
+      if (value < 9)
+        return { rating: "⛅ Redelijk", label: "Zonuren", unit: "" };
+      return { rating: "☀️ Veel zon", label: "Zonuren", unit: "" };
+    }
+
+    if (metric === "maxTemp") {
+      if (value < 18)
+        return { rating: "🧥 Fris", label: "Temperatuur", unit: " °C" };
+      if (value < 24)
+        return { rating: "👕 Aangenaam", label: "Temperatuur", unit: " °C" };
+      if (value < 30)
+        return { rating: "😎 Warm", label: "Temperatuur", unit: " °C" };
+      return { rating: "🥵 Heet", label: "Temperatuur", unit: " °C" };
+    }
+
+    if (metric === "maxUV") {
+      if (value < 3) return { rating: "🟢 Laag", label: "UV-Index", unit: "" };
+      if (value < 6) return { rating: "🟡 Matig", label: "UV-Index", unit: "" };
+      if (value < 8) return { rating: "🟠 Sterk", label: "UV-Index", unit: "" };
+      return { rating: "🔴 Zeer sterk", label: "UV-Index", unit: "" };
+    }
+
+    return { rating: "", label: "", unit: "" };
+  }
+
+  // Tooltip tonen (Tabel)
+  function showTableTooltip(event, text) {
+    const tooltip = d3.select(tooltipContainer);
+    tooltip
+      .style("opacity", 1)
+      .html(text)
+      .style("left", event.clientX + 15 + "px")
+      .style("top", event.clientY + 15 + "px");
+  }
+
+  // Tooltip verbergen
+  function hideTableTooltip() {
+    d3.select(tooltipContainer).style("opacity", 0);
+  }
+
+  // ------------------------------------------------------------------
+  // D3 Chart Logica
+  // ------------------------------------------------------------------
   function drawChart(chartData) {
-    // Stop direct als de container nog niet bestaat of er geen data is
     if (!svgContainer || !chartData?.length) return;
 
+    // 1. Bereken dynamische marge
     const maxNameLength = d3.max(
       chartData,
-      (d) => (d.shortName || d.name).length
+      (dataPoint) => (dataPoint.shortName || dataPoint.name).length
     );
+    MARGIN.left = Math.max(110, Math.min(250, maxNameLength * 9));
 
-    const requiredMargin = Math.max(110, Math.min(250, maxNameLength * 9));
-
-    MARGIN.left = requiredMargin;
-
-    // Bereken de beschikbare ruimte binnen de container
+    // 2. Afmetingen
     const containerWidth = svgContainer.clientWidth;
     const CHART_WIDTH = containerWidth - MARGIN.left - MARGIN.right;
     const CHART_HEIGHT = height - MARGIN.bottom;
 
-    // Nieuwe SVG aanmaken en container resetten
+    // 3. SVG Opzetten
     const svg = d3
       .select(svgContainer)
-      .html("") // verwijdert oude grafiek
+      .html("")
       .append("svg")
       .attr("width", containerWidth)
       .attr("height", height)
       .append("g")
       .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-    // Schalen voor X-as en Y-as
+    // 4. Schalen (Scales)
     const yScale = d3
       .scaleBand()
-      .domain(chartData.map((d) => d.shortName))
+      .domain(chartData.map((dataPoint) => dataPoint.shortName))
       .range([0, CHART_HEIGHT])
       .padding(0.25);
 
-    const maxValue = d3.max(chartData, (d) => d[selectedMetric]);
-
     const xScale = d3
       .scaleLinear()
-      .domain([0, maxValue])
+      .domain([0, d3.max(chartData, (dataPoint) => dataPoint[selectedMetric])])
       .range([0, CHART_WIDTH]);
 
-    // Gridlijnen toevoegen
+    // 5. Grid
     const grid = d3
       .axisBottom(xScale)
       .tickSize(-CHART_HEIGHT)
       .tickFormat("")
       .ticks(5);
-
     svg
       .append("g")
       .attr("class", "grid-lines")
@@ -120,8 +183,8 @@
       .select(".domain")
       .remove();
 
-    // Balken tekenen
-    const tooltip = d3.select("#d3-tooltip");
+    // 6. Bars tekenen
+    const tooltip = d3.select(tooltipContainer);
 
     svg
       .selectAll("rect")
@@ -129,89 +192,56 @@
       .join("rect")
       .attr("class", "bar")
       .attr("x", xScale(0))
-      .attr("y", (d) => yScale(d.shortName))
+      .attr("y", (dataPoint) => yScale(dataPoint.shortName))
       .attr("height", yScale.bandwidth())
       .attr("rx", 6)
       .attr("ry", 6)
       .attr("fill", colors[selectedMetric] || "#FEA600")
       .attr("width", 0)
 
-      // Interactie
+      // Events
       .on("mouseover", () => tooltip.style("opacity", 1))
-      .on("mousemove", (event, d) => {
-        const rawValue = d[selectedMetric];
-
-        let val = rawValue;
-        let unit = "";
-        let tooltipLabel = "";
-        let rating = "";
+      .on("mousemove", (event, dataPoint) => {
+        const { rating, label, unit } = getRatingAndLabel(
+          dataPoint,
+          selectedMetric
+        );
+        let displayValue = dataPoint[selectedMetric];
 
         if (selectedMetric === "averageHours") {
-          val = formatDuration(rawValue * 3600);
-          tooltipLabel = "Zonuren";
-
-          // Beoordeling voor Zonuren
-          if (rawValue < 5) rating = "☁️ Weinig";
-          else if (rawValue < 9) rating = "⛅ Redelijk";
-          else rating = "☀️ Veel zon";
+          displayValue = formatDuration(displayValue * 3600);
         }
-
-        if (selectedMetric === "maxTemp") {
-          unit = " °C";
-          tooltipLabel = "Temperatuur";
-
-          // Beoordeling voor Temperatuur
-          if (rawValue < 18) rating = "🧥 Fris";
-          else if (rawValue < 24) rating = "👕 Aangenaam";
-          else if (rawValue < 30) rating = "😎 Warm";
-          else rating = "🥵 Heet";
-        }
-
-        if (selectedMetric === "maxUV") {
-          unit = "";
-          tooltipLabel = "UV-Index";
-
-          // Beoordeling voor UV
-          if (rawValue < 3) rating = "🟢 Laag";
-          else if (rawValue < 6) rating = "🟡 Matig";
-          else if (rawValue < 8) rating = "🟠 Sterk";
-          else rating = "🔴 Zeer sterk";
-        }
-
-        const x = event.clientX;
-        const y = event.clientY;
 
         tooltip
           .style("opacity", 1)
           .html(
-            `
-            <b>${d.name}</b><br/>
-            ${tooltipLabel}: ${val}${unit}<br/>
-            ${rating}<br/>
-            <div class="tooltip-hint">👆 Klik voor details</div>`
+            `<b>${dataPoint.name}</b><br/>${label}: ${displayValue}${unit}<br/>${rating}<br/><div class="tooltip-hint">👆 Klik voor details</div>`
           )
-          .style("left", x + 15 + "px")
-          .style("top", y + 15 + "px");
+          .style("left", event.clientX + 15 + "px")
+          .style("top", event.clientY + 15 + "px");
       })
       .on("mouseout", () => tooltip.style("opacity", 0))
-      .on("click", (event, d) => {
-        if (!d.rawData) {
-          console.log("Geen details voor", d.name);
+      .on("click", (event, dataPoint) => {
+        if (!dataPoint.forecast) {
+          console.log("Geen details voor", dataPoint.name);
           return;
         }
-        selectedCity = d;
+        selectedCity = dataPoint;
+
+        // Scrollen
         setTimeout(() => {
           document
             .querySelector(".detail-panel")
             ?.scrollIntoView({ behavior: "smooth" });
         }, 10);
       })
+      // Animatie
       .transition()
       .duration(1000)
       .ease(d3.easeCubicOut)
-      .attr("width", (d) => xScale(d[selectedMetric]));
+      .attr("width", (dataPoint) => xScale(dataPoint[selectedMetric]));
 
-    // Assen
+    // 7. Assen
     const xAxis = svg
       .append("g")
       .attr("transform", `translate(0,${CHART_HEIGHT})`)
@@ -222,49 +252,24 @@
       .attr("class", "axis-y")
       .call(d3.axisLeft(yScale));
 
-    // Opruimen van assen
     xAxis.select(".domain").remove();
     yAxis.select(".domain").remove();
     yAxis.selectAll(".tick line").remove();
-  }
-
-  // Helper functies voor de tabel-tooltip
-  function showTableTooltip(event, text) {
-    const tooltip = d3.select("#d3-tooltip");
-
-    const x = event.clientX;
-    const y = event.clientY;
-
-    tooltip
-      .style("opacity", 1)
-      .html(text)
-      .style("left", x + 15 + "px")
-      .style("top", y + 15 + "px");
-  }
-
-  function hideTableTooltip() {
-    d3.select("#d3-tooltip").style("opacity", 0);
-  }
-
-  // Automatisch opnieuw tekenen wanneer data verandert
-  $: if (data && svgContainer && selectedMetric && yLabel) {
-    drawChart(data);
   }
 </script>
 
 <div class="d3-container">
   <div bind:this={svgContainer}></div>
 
-  <div id="d3-tooltip"></div>
+  <div class="chart-tooltip" bind:this={tooltipContainer}></div>
 
-  {#if selectedCity && selectedCity.rawData}
+  {#if selectedCity && selectedCity.forecast}
     <div class="detail-panel">
       <div class="panel-header">
         <div class="header-text">
           <h3>Weersvoorspelling: {selectedCity.name}</h3>
           <p class="subtitle">Verwachting voor de komende zeven dagen</p>
         </div>
-
         <div class="header-actions">
           <div class="mini-search">
             <input
@@ -272,21 +277,17 @@
               placeholder="🔍 Andere stad..."
               bind:value={searchTerm}
             />
-
             {#if searchResults.length > 0}
               <ul class="mini-results">
                 {#each searchResults as city}
-                  <button on:click={() => switchCity(city)}>
-                    {city.name}
-                  </button>
+                  <button on:click={() => switchCity(city)}>{city.name}</button>
                 {/each}
               </ul>
             {/if}
           </div>
-
-          <button class="close-button" on:click={() => (selectedCity = null)}>
-            &times;
-          </button>
+          <button class="close-button" on:click={() => (selectedCity = null)}
+            >&times;</button
+          >
         </div>
       </div>
 
@@ -294,85 +295,67 @@
         <thead>
           <tr>
             <th
-              on:mousemove={(e) =>
+              on:mousemove={(event) =>
                 showTableTooltip(
-                  e,
-                  "<b>Datum</b><br>De dag waarvoor deze weersvoorspelling geldt."
+                  event,
+                  "<b>Datum</b><br>De dag waarvoor deze voorspelling geldt."
                 )}
-              on:mouseleave={hideTableTooltip}
+              on:mouseleave={hideTableTooltip}>📅 Datum</th
             >
-              📅 Datum
-            </th>
-
             <th
-              on:mousemove={(e) =>
+              on:mousemove={(event) =>
                 showTableTooltip(
-                  e,
-                  "<b>Zonuren</b><br>Het totaal aantal uren dat de zon naar verwachting zal schijnen."
+                  event,
+                  "<b>Zonuren</b><br>Verwacht aantal uren zon."
                 )}
-              on:mouseleave={hideTableTooltip}
+              on:mouseleave={hideTableTooltip}>☀️ Zonuren</th
             >
-              ☀️ Zonuren
-            </th>
-
             <th
-              on:mousemove={(e) =>
+              on:mousemove={(event) =>
                 showTableTooltip(
-                  e,
-                  "<b>Temperatuur</b><br>De laagste temperatuur ('s nachts) en de hoogste temperatuur (overdag)."
+                  event,
+                  "<b>Temperatuur</b><br>Min / Max temperatuur."
                 )}
-              on:mouseleave={hideTableTooltip}
+              on:mouseleave={hideTableTooltip}>🌡️ Temp</th
             >
-              🌡️ Temp
-            </th>
-
             <th
-              on:mousemove={(e) =>
+              on:mousemove={(event) =>
                 showTableTooltip(
-                  e,
-                  "<b>UV-index</b><br>De maximale kracht van de zon. Hoe hoger het getal, hoe sneller je verbrandt (smeer je goed in)!"
+                  event,
+                  "<b>UV-index</b><br>Maximale zonkracht."
                 )}
-              on:mouseleave={hideTableTooltip}
+              on:mouseleave={hideTableTooltip}>⛱️ UV</th
             >
-              ⛱️ UV
-            </th>
-
             <th
-              on:mousemove={(e) =>
+              on:mousemove={(event) =>
                 showTableTooltip(
-                  e,
-                  "<b>Windsnelheid</b><br>De maximale windsnelheid in km/h, met de windkracht (Beaufort) tussen haakjes."
+                  event,
+                  "<b>Wind</b><br>Snelheid in km/h (en Beaufort)."
                 )}
-              on:mouseleave={hideTableTooltip}
+              on:mouseleave={hideTableTooltip}>💨 Wind</th
             >
-              💨 Wind
-            </th>
           </tr>
         </thead>
         <tbody>
-          {#each selectedCity.rawData.daily.time as date, index}
+          {#each selectedCity.forecast as day}
             <tr>
-              <td>{formatDate(date)}</td>
+              <td>{formatDate(day.date)}</td>
+
+              <td>{formatDuration(day.sunSeconds)}</td>
+
               <td>
-                {formatDuration(
-                  selectedCity.rawData.daily.sunshine_duration[index]
-                )}
-              </td>
-              <td>
-                {#if selectedCity.rawData.daily.temperature_2m_min}
-                  {selectedCity.rawData.daily.temperature_2m_min[index]} /
-                  {selectedCity.rawData.daily.temperature_2m_max[index]} °C
+                {#if day.minTemp !== null}
+                  {day.minTemp} / {day.maxTemp} °C
                 {:else}
-                  {selectedCity.rawData.daily.temperature_2m_max[index]} °C
+                  {day.maxTemp} °C
                 {/if}
               </td>
-              <td>{selectedCity.rawData.daily.uv_index_max[index]}</td>
+
+              <td>{day.uvIndex}</td>
+
               <td>
-                {#if selectedCity.rawData.daily.wind_speed_10m_max}
-                  {selectedCity.rawData.daily.wind_speed_10m_max[index]} km/h (Bft
-                  {kmhToBeaufort(
-                    selectedCity.rawData.daily.wind_speed_10m_max[index]
-                  )})
+                {#if day.windSpeed !== null}
+                  {day.windSpeed} km/h (Bft {kmhToBeaufort(day.windSpeed)})
                 {:else}
                   -
                 {/if}
