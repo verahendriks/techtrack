@@ -1,4 +1,6 @@
-// --- Imports ---
+// ------------------------------------------------------------------
+// Imports
+// ------------------------------------------------------------------
 import { 
   GEOJSON_FILE, 
   SEARCH_FILE,
@@ -8,14 +10,16 @@ import {
   CACHE_KEY, 
   delay 
 } from "./config.js";
-import { featureToCity, buildApiUrl, computeCityMetrics } from "./dataProcessor.js";
 
-// Haalt de stedenlijst op uit het GeoJSON-bestand
+import { featureToCity, buildApiUrl, computeCityMetrics, processDailyForecast } from "./dataProcessor.js";
+
+// ------------------------------------------------------------------
+// Functie: Steden voorbereiden
+// ------------------------------------------------------------------
 export async function prepareCities() {
   try {
     const response = await fetch(GEOJSON_FILE);
-    if (!response.ok) throw new Error(`GeoJSON laadfout: ${response.status}`);
-
+    if (!response.ok) throw new Error(`Fout bij laden GeoJSON: ${response.status}`);
     const geojsonData = await response.json();
     return geojsonData.features.map(featureToCity);
   } catch (error) {
@@ -24,52 +28,51 @@ export async function prepareCities() {
   }
 }
 
+// ------------------------------------------------------------------
+// Functie: Zoeklijst laden
+// ------------------------------------------------------------------
 export async function loadSearchCities() {
   try {
-    const response = await fetch(SEARCH_FILE); // <--- Pakt het GROTE bestand
-    if (!response.ok) throw new Error(`Search GeoJSON fout: ${response.status}`);
+    const response = await fetch(SEARCH_FILE);
+    if (!response.ok) throw new Error(`Fout bij laden zoeklijst: ${response.status}`);
     const data = await response.json();
     return data.features.map(featureToCity);
   } catch (error) {
-    console.error("Fout bij zoeklijst:", error);
+    console.error("Fout bij ophalen zoeklijst:", error);
     return [];
   }
 }
 
-// Haalt weerdata op en creëert de Top 10 ranking
+// ------------------------------------------------------------------
+// Functie: Ranking ophalen
+// ------------------------------------------------------------------
 export async function getRanking() {
-  const now = Date.now();
-  let expiredData = null;
+  const currentTime = Date.now();
+  let expiredCacheData = null;
 
-  // 1. Controleer cache
+  // 1. Cache check
   try {
     const cachedItem = localStorage.getItem(CACHE_KEY);
     if (cachedItem) {
       const { timestamp, data } = JSON.parse(cachedItem);
-      
-      if (now - timestamp < CACHE_EXPIRY_MS) return data;
-
-      expiredData = data;
+      if (currentTime - timestamp < CACHE_EXPIRY_MS) return data;
+      expiredCacheData = data;
     }
-  } catch (e) {
-    console.error("Fout bij lezen/parsen van cache:", e);
+  } catch (error) {
+    console.error("Fout bij cache:", error);
   }
 
-  // 2. Haal nieuwe data op
+  // 2. Nieuwe data ophalen
   try {
     const cities = await prepareCities();
     
-    // Als steden laden mislukt, toon oude cache indien beschikbaar
     if (cities.length === 0) {
-        if (expiredData) {
-            console.log("Kon steden niet laden, toon oude cache.");
-            return expiredData;
-        }
+        if (expiredCacheData) return expiredCacheData;
         return [];
     }
 
     const fetchCityData = async (city, index) => {
-      await delay(index * API_CALL_DELAY_MS); // Rate limiting
+      await delay(index * API_CALL_DELAY_MS);
 
       try {
         const apiUrl = buildApiUrl(city, API_BASE_URL);
@@ -78,58 +81,47 @@ export async function getRanking() {
 
         const data = await response.json();
 
-      if (data.daily?.sunshine_duration != null) {
-          const { name, shortName, averageHours, maxUV, maxTemp, maxWind } = computeCityMetrics(city, data.daily);
+        if (data.daily?.sunshine_duration != null) {
+          const metrics = computeCityMetrics(city, data.daily);
+          
+          const cleanForecast = processDailyForecast(data.daily);
           
           return {
-            name,
-            shortName,
-            averageHours,
-            maxUV,
-            maxTemp,
-            maxWind,
-            rawData: data
+            ...metrics,
+            forecast: cleanForecast
           };        
         }
       } catch (error) {
-        console.error(`Fout bij het ophalen voor ${city.name}:`, error);
+        console.error(`Fout bij ${city.name}:`, error);
       }
       return null;
     };
 
-    // Parallelle uitvoering
     const results = await Promise.all(cities.map(fetchCityData));
+    const validResults = results.filter((item) => item !== null);
+    
+    validResults.sort((cityA, cityB) => cityB.averageHours - cityA.averageHours);
 
-// 3. Sorteer en cache resultaat
-    const allResults = results
-      .filter(Boolean)
-      .sort((a, b) => b.averageHours - a.averageHours); // Standaard sorteren op zon
-
-    // We noemen het nu allResults ipv top10, en we slicen NIET meer!
-    if (allResults.length > 0) {
+    if (validResults.length > 0) {
       localStorage.setItem(
         CACHE_KEY,
-        JSON.stringify({ timestamp: now, data: allResults })
+        JSON.stringify({ timestamp: currentTime, data: validResults })
       );
-      return allResults; // <--- Geef ALLES terug
+      return validResults;
     } else {
-       throw new Error("Geen resultaten uit API gekomen");
+       throw new Error("Geen resultaten");
     }
 
-  } catch (e) {
-    console.log("Fout in getRanking:", e);
-    
-    // Fallback: toon verlopen cache als API faalt
-    if (expiredData) {
-        console.log("API faalde, maar we tonen verlopen cache data.");
-        return expiredData;
-    }
-    
-    // Als er echt geen data is
+  } catch (error) {
+    console.log("Fout in getRanking:", error);
+    if (expiredCacheData) return expiredCacheData;
     return []; 
   }
 }
 
+// ------------------------------------------------------------------
+// Functie: Specifiek stadsweer ophalen
+// ------------------------------------------------------------------
 export async function fetchSingleCityWeather(city) {
   try {
     const apiUrl = buildApiUrl(city, API_BASE_URL);
@@ -138,13 +130,15 @@ export async function fetchSingleCityWeather(city) {
 
     if (data.daily) {
       const metrics = computeCityMetrics(city, data.daily);
+      const cleanForecast = processDailyForecast(data.daily);
+
       return {
         ...metrics,
-        rawData: data
+        forecast: cleanForecast
       };
     }
-  } catch (e) {
-    console.error("Fout bij ophalen specifiek weer:", e);
+  } catch (error) {
+    console.error("Fout bij ophalen specifiek weer:", error);
   }
   return null;
 }

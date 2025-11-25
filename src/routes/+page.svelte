@@ -1,44 +1,62 @@
 <script>
-  // --- Imports ---
-  import { onMount } from "svelte"; // Hook die wordt uitgevoerd zodra de component in de browser wordt weergegeven
-  import { getRanking } from "$lib/rankingCities"; // Asynchrone service voor data ophalen
-  import BarChart from "../components/barChart.svelte"; // Visualisatiecomponent
+  // ------------------------------------------------------------------
+  // Imports
+  // ------------------------------------------------------------------
+  import { onMount } from "svelte";
 
-  let allCitiesData = []; // Hier worden alle steden bewaard
-  let top10Data = []; // Dit is de set die we naar de grafiek sturen
+  // Importeer de logica om data op te halen
+  import { getRanking } from "$lib/rankingCities";
 
-  let loading = true;
-  let loadingError = "";
+  // Importeer de presentatie-component
+  import BarChart from "../components/barChart.svelte";
 
-  // Huidige instelling (standaard op Zon)
+  // ------------------------------------------------------------------
+  // Status Variabelen (State)
+  // ------------------------------------------------------------------
+  let allCitiesData = []; // De volledige bron-dataset (alle steden)
+  let top10Data = []; // De gefilterde dataset die we aan de grafiek geven
+
+  let isLoading = true; // Houdt bij of we nog aan het laden zijn
+  let loadingError = ""; // Bevat de foutmelding als er iets misgaat
+
+  // Huidige configuratie van de weergave
   let currentMetric = "averageHours";
   let currentLabel = "Meeste zonuren";
-
   let currentSubtitle =
     "Het gemiddeld aantal zonuren per dag over de komende zeven dagen";
 
-  // Wordt uitgevoerd zodra de component in de browser wordt weergegeven
+  // ------------------------------------------------------------------
+  // Lifecycle (Opstarten)
+  // ------------------------------------------------------------------
   onMount(async () => {
     try {
-      // Haal alle steden op
+      // STAP 1: Haal alle data op (dit gebeurt asynchroon via de API of Cache)
       const results = await getRanking();
+
+      // STAP 2: Sla de resultaten op in de status
       allCitiesData = results;
 
-      // Maak direct de eerste ranking
+      // STAP 3: Bereken direct de eerste ranglijst
       updateRanking();
-    } catch (e) {
-      loadingError = "Fout bij het laden van data.";
-      console.error(e);
+    } catch (error) {
+      loadingError = "Er is een fout opgetreden bij het laden van de weerdata.";
+      console.error("Fout in +page.svelte:", error);
     } finally {
-      loading = false;
+      // Dit wordt altijd uitgevoerd, succes of fout, om de spinner te stoppen
+      isLoading = false;
     }
   });
 
-  // Functie die wordt aangeroepen als je op een knop klikt
+  // ------------------------------------------------------------------
+  // Interactie Logica
+  // ------------------------------------------------------------------
+
+  // Functie: Wissel van metriek (bijv. van Zon naar Temperatuur)
   function setMetric(metric, label) {
     currentMetric = metric;
     currentLabel = label;
 
+    // Pas de subtitel aan op basis van de gekozen metriek
     if (metric === "averageHours") {
       currentSubtitle =
         "Het gemiddeld aantal zonuren per dag over de komende zeven dagen";
@@ -50,21 +68,27 @@
         "De maximale verwachte UV-index (zonkracht) in de komende zeven dagen";
     }
 
+    // Herbereken de top 10 op basis van de nieuwe keuze
     updateRanking();
   }
 
-  // Deze functie sorteert de lijst en pakt de top 10
+  // Functie: Sorteer de data en pak de beste 10
   function updateRanking() {
+    // Veiligheidscheck: als er nog geen data is, doe niets
     if (!allCitiesData || allCitiesData.length === 0) return;
 
-    // 1. Maak een kopie van de lijst om te sorteren
-    let sorted = [...allCitiesData];
+    // 1. Maak een kopie van de array
+    // We willen de originele volgorde van 'allCitiesData' niet per ongeluk veranderen
+    let sortedCities = [...allCitiesData];
 
-    // 2. Sorteer van hoog naar laag op basis van de gekozen metric
-    sorted.sort((a, b) => b[currentMetric] - a[currentMetric]);
+    // 2. Sorteer van hoog naar laag op basis van de huidige metriek
+    // We gebruiken 'cityA' en 'cityB' voor duidelijkheid (geen 'a' en 'b')
+    sortedCities.sort((cityA, cityB) => {
+      return cityB[currentMetric] - cityA[currentMetric];
+    });
 
-    // 3. Pak alleen de eerste 10
-    top10Data = sorted.slice(0, 10);
+    // 3. Pak alleen de eerste 10 resultaten (slice)
+    top10Data = sortedCities.slice(0, 10);
   }
 </script>
 
@@ -77,8 +101,10 @@
   </div>
 
   {#if loadingError}
-    <p style="color: red;">{loadingError}</p>
-  {:else if loading}
+    <div class="error-message">
+      <p>{loadingError}</p>
+    </div>
+  {:else if isLoading}
     <div class="loading-container">
       <div class="spinner"></div>
     </div>
