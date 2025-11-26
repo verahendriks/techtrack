@@ -10,7 +10,6 @@ import {
   CACHE_KEY, 
   delay 
 } from "./config.js";
-
 import { featureToCity, buildApiUrl, computeCityMetrics, processDailyForecast } from "./dataProcessor.js";
 
 // ------------------------------------------------------------------
@@ -47,6 +46,7 @@ export async function loadSearchCities() {
 // Functie: Ranking ophalen
 // ------------------------------------------------------------------
 export async function getRanking() {
+  console.log("Start met ophalen van verse data van de API...");
   const currentTime = Date.now();
   let expiredCacheData = null;
 
@@ -113,7 +113,7 @@ export async function getRanking() {
     }
 
   } catch (error) {
-    console.log("Fout in getRanking:", error);
+    console.error("Fout in getRanking:", error);
     if (expiredCacheData) return expiredCacheData;
     return []; 
   }

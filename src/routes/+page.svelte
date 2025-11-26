@@ -3,15 +3,12 @@
   // Imports
   // ------------------------------------------------------------------
   import { onMount } from "svelte";
-
-  // Importeer de logica om data op te halen
   import { getRanking } from "$lib/rankingCities";
 
-  // Importeer de presentatie-component
   import BarChart from "../components/barChart.svelte";
 
   // ------------------------------------------------------------------
-  // Status Variabelen (State)
+  // State
   // ------------------------------------------------------------------
   let allCitiesData = []; // De volledige bron-dataset (alle steden)
   let top10Data = []; // De gefilterde dataset die we aan de grafiek geven
@@ -26,17 +23,17 @@
     "Het gemiddeld aantal zonuren per dag over de komende zeven dagen";
 
   // ------------------------------------------------------------------
-  // Lifecycle (Opstarten)
+  // Lifecycle
   // ------------------------------------------------------------------
   onMount(async () => {
     try {
-      // STAP 1: Haal alle data op (dit gebeurt asynchroon via de API of Cache)
+      // 1. Haal alle data op (dit gebeurt asynchroon via de API of Cache)
       const results = await getRanking();
 
-      // STAP 2: Sla de resultaten op in de status
+      // 2. Sla de resultaten op in de status
       allCitiesData = results;
 
-      // STAP 3: Bereken direct de eerste ranglijst
+      // 3. Bereken direct de eerste ranglijst
       updateRanking();
     } catch (error) {
       loadingError = "Er is een fout opgetreden bij het laden van de weerdata.";
@@ -78,11 +75,9 @@
     if (!allCitiesData || allCitiesData.length === 0) return;
 
     // 1. Maak een kopie van de array
-    // We willen de originele volgorde van 'allCitiesData' niet per ongeluk veranderen
     let sortedCities = [...allCitiesData];
 
     // 2. Sorteer van hoog naar laag op basis van de huidige metriek
-    // We gebruiken 'cityA' en 'cityB' voor duidelijkheid (geen 'a' en 'b')
     sortedCities.sort((cityA, cityB) => {
       return cityB[currentMetric] - cityA[currentMetric];
     });

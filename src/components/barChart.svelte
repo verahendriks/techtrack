@@ -12,7 +12,7 @@
   import { loadSearchCities, fetchSingleCityWeather } from "$lib/rankingCities";
 
   // ------------------------------------------------------------------
-  // Props (Input van buitenaf)
+  // Props
   // ------------------------------------------------------------------
   export let data;
   export let height = 450;
@@ -21,7 +21,7 @@
   export let selectedCity = null;
 
   // ------------------------------------------------------------------
-  // Lokale Status (State)
+  // State
   // ------------------------------------------------------------------
   let searchList = [];
   let searchTerm = "";
@@ -83,7 +83,7 @@
     }
   }
 
-  // Helper: Bepaal tekst en label voor de tooltip
+  // Bepaal tekst en label voor de tooltip
   function getRatingAndLabel(dataPoint, metric) {
     const value = dataPoint[metric];
 
@@ -223,7 +223,7 @@
       .on("mouseout", () => tooltip.style("opacity", 0))
       .on("click", (event, dataPoint) => {
         if (!dataPoint.forecast) {
-          console.log("Geen details voor", dataPoint.name);
+          console.warn("Geen details voor", dataPoint.name);
           return;
         }
         selectedCity = dataPoint;
