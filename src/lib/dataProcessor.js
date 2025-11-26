@@ -8,7 +8,7 @@ import { FORECAST_DAYS, SECONDS_PER_HOUR } from "./config.js";
 // ------------------------------------------------------------------
 // Haalt de belangrijke data uit de GeoJSON structuur en 
 // zet dit om naar een object dat makkelijker te gebruiken is
-export const featureToCity = ({ properties, geometry }) => {
+export function featureToCity({ properties, geometry }) {
   const [longitude, latitude] = geometry.coordinates;
 
   return {
@@ -16,30 +16,30 @@ export const featureToCity = ({ properties, geometry }) => {
     shortName: properties.city,
     latitude: latitude,
     longitude: longitude,
-    timezone: properties.timezone || "UTC" // Gebruik 'UTC' als fallback als de tijdzone ontbreekt in de data
+    timezone: properties.timezone || "UTC" // Gebruik 'UTC' als fallback
   };
-};
+}
 
 // ------------------------------------------------------------------
 // Functie: API URL samenstellen
 // ------------------------------------------------------------------
 // Maakt de specifieke URL voor Open-Meteo, inclusief de benodigde 
 // weer-parameters en juiste codering van de tijdzone
-export const buildApiUrl = ({ latitude, longitude, timezone }, apiBaseUrl) => {
+export function buildApiUrl({ latitude, longitude, timezone }, apiBaseUrl) {
   const encodedTimezone = encodeURIComponent(timezone);
   
   return `${apiBaseUrl}?latitude=${latitude}&longitude=${longitude}` +
          `&daily=sunshine_duration,temperature_2m_min,temperature_2m_max,uv_index_max,wind_speed_10m_min,wind_speed_10m_max` +
          `&timezone=${encodedTimezone}` +
          `&forecast_days=${FORECAST_DAYS}`;
-};
+}
 
 // ------------------------------------------------------------------
 // Functie: Weerstatistieken berekenen
 // ------------------------------------------------------------------
-// Voegt de de data van 7 dagen samen tot één set cijfers
+// Voegt de data van 7 dagen samen tot één set cijfers
 // om de steden onderling te kunnen vergelijken in de ranglijst
-export const computeCityMetrics = (city, dailyData) => {
+export function computeCityMetrics(city, dailyData) {
   const {
     sunshine_duration,
     temperature_2m_max,
@@ -66,22 +66,22 @@ export const computeCityMetrics = (city, dailyData) => {
     maxTemp: maxTemp,
     maxUV: maxUV
   };
-};
+}
 
 // ------------------------------------------------------------------
 // Functie: Voorspelling formatteren
 // ------------------------------------------------------------------
 // Zet de losse data-arrays van de API om naar een lijst van dag objecten 
 // en vangt eventueel ontbrekende data (null) veilig af
-export const processDailyForecast = (dailyData) => {
+export function processDailyForecast(dailyData) {
   return dailyData.time.map((dateString, index) => ({
     date: dateString,
-    sunSeconds: dailyData.sunshine_duration[index],
     
     // Ternary checks: als data ontbreekt (null), geef null terug, anders de waarde
+    sunSeconds: dailyData.sunshine_duration ? dailyData.sunshine_duration[index] : 0,
     minTemp: dailyData.temperature_2m_min ? dailyData.temperature_2m_min[index] : null,
     maxTemp: dailyData.temperature_2m_max ? dailyData.temperature_2m_max[index] : null,
     uvIndex: dailyData.uv_index_max ?  dailyData.uv_index_max[index] : null,
     windSpeed: dailyData.wind_speed_10m_max ? dailyData.wind_speed_10m_max[index] : null
   }));
-};
+}

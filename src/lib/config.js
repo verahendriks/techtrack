@@ -22,8 +22,8 @@ export const SEARCH_FILE = "/data/searchCities.geojson";
 // De naam waaronder de data wordt opgeslagen in de browser (LocalStorage)
 export const CACHE_KEY = "ranking_cache";
 
-// Hoe lang mag de data oud zijn voordat er nieuwe wordt opgehaald (1 uur)
-export const CACHE_EXPIRY_MS = 60 * 60 * 1000;
+// Hoe lang mag de data oud zijn voordat er nieuwe wordt opgehaald (6 uur)
+export const CACHE_EXPIRY_MS = 6 * 60 * 60 * 1000;
 
 // ------------------------------------------------------------------
 // Rate Limiting (API bescherming)
