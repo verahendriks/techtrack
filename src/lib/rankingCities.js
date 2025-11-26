@@ -46,7 +46,6 @@ export async function loadSearchCities() {
 // Functie: Ranking ophalen
 // ------------------------------------------------------------------
 export async function getRanking() {
-  console.log("Start met ophalen van verse data van de API...");
   const currentTime = Date.now();
   let expiredCacheData = null;
 
